@@ -1,0 +1,20 @@
+{
+  "name": "thesis-shredder",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "harvest": "node scripts/harvest_1000_calls.js",
+    "test": "echo \"Ready\" && exit 0"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.3",
+    "express": "^5.2.1"
+  }
+}
