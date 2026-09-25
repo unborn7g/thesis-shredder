@@ -23,8 +23,8 @@ Runs in under 10 seconds.
 
 Check out the 45s demo below 👇
 
-🔗 GitHub: [YOUR_GITHUB_REPO_URL]
-🌐 Live Demo: [YOUR_DEPLOYED_URL_OR_PREVIEW]
+🔗 GitHub: https://github.com/unborn7g/thesis-shredder
+📹 Video attached: thesis-shredder-demo.mp4
 
 #MeridianBuildathon #Nansen #OnchainIntelligence #CryptoAI
 ```
@@ -44,6 +44,6 @@ It queries Nansen's Smart Money, Token God Mode, and Address Profiler endpoints 
 
 Watch it shred an insider cabal launch in 30 seconds 📽️👇
 
-GitHub: [YOUR_GITHUB_REPO_URL]
+GitHub: https://github.com/unborn7g/thesis-shredder
 #MeridianBuildathon @nansen_ai
 ```

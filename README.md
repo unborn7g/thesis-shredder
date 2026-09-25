@@ -86,6 +86,22 @@ Open **`http://localhost:3000`** in your browser.
 
 ---
 
+## 🎥 Video Walkthrough (1080p with Voiceover & Subtitles)
+
+A complete 1080p HD walkthrough video with professional voiceover narration, animated cursor tracking, and live telemetry execution is included directly in this repository:
+
+▶️ **File:** [`thesis-shredder-demo.mp4`](./thesis-shredder-demo.mp4) *(1m 17s, 5.2 MB, H.264 / AAC)*
+
+### Video Breakdown:
+- **00:00 - 00:12 | Overview:** Introducing Thesis Shredder as an adversarial on-chain due diligence engine.
+- **00:12 - 00:26 | Thesis Ingestion:** Interrogating hyped memecoin ($CATNIP) against live Nansen REST API endpoints.
+- **00:26 - 00:42 | Adversarial Breakdown:** Uncovering 85/100 Critical Risk, coordinated sybil cabal, and unlocked liquidity traps.
+- **00:42 - 00:56 | Guided Thesis Wizard:** Non-technical analysts formulating structured multi-vector hypotheses in seconds.
+- **00:56 - 01:10 | Fundamental Validation:** Interrogating $AAVE, confirming low risk, verified Smart Money inflows, and decentralized treasury.
+- **01:10 - 01:17 | Architecture & Harvester:** Nansen REST API integration, 1,000 call harvester qualifier, and open-source repository.
+
+---
+
 ## 🧪 Verified Historical Case Studies (Built-in)
 
 Thesis Shredder includes 4 pre-loaded real-world case studies demonstrating its versatility across chains:

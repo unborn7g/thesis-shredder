@@ -1,16 +1,14 @@
 /**
  * Live Nansen API Client
- * Wraps Nansen REST endpoints & MCP protocols with rate-limiting, telemetry,
- * and error fallbacks.
+ * Wraps Nansen REST endpoints with rate-limiting, telemetry, and error fallbacks.
  */
 
 const https = require('https');
-const http = require('http');
 
 class NansenClient {
   constructor(apiKey = process.env.NANSEN_API_KEY) {
     this.apiKey = apiKey;
-    this.baseUrl = 'https://api.nansen.ai';
+    this.baseUrl = 'https://api.nansen.ai/api/v1';
     this.callsMade = 0;
   }
 
@@ -31,7 +29,7 @@ class NansenClient {
     const headers = {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
-      'NANSEN-API-KEY': this.apiKey,
+      'apiKey': this.apiKey,
       'User-Agent': 'ThesisShredder/1.0 (MeridianBuildathon)',
       ...(options.headers || {})
     };
@@ -43,7 +41,7 @@ class NansenClient {
       const reqOptions = {
         hostname: parsedUrl.hostname,
         path: parsedUrl.pathname + parsedUrl.search,
-        method: options.method || 'GET',
+        method: options.method || 'POST',
         headers: headers,
         timeout: 10000
       };
@@ -59,7 +57,7 @@ class NansenClient {
               resolve({ raw: body });
             }
           } else {
-            reject(new Error(`Nansen API returned ${res.statusCode}: ${body.slice(0, 200)}`));
+            reject(new Error(`Nansen API returned ${res.statusCode}: ${body.slice(0, 150)}`));
           }
         });
       });
@@ -78,53 +76,39 @@ class NansenClient {
     });
   }
 
-  // Token Screener
-  async getTrendingTokens(chain = 'solana', limit = 20) {
-    return this.request('/v1/token/screener', {
-      method: 'POST',
-      body: { chain, limit, timeframe: '24h' }
+  // Smart Money Holdings
+  async getSmartMoneyHoldings(chains = ['ethereum', 'solana', 'base']) {
+    return this.request('/smart-money/holdings', {
+      body: { chains, pagination: { page: 1, per_page: 25 } }
     });
   }
 
-  // Smart Money Netflow
-  async getSmartMoneyNetflow(chain = 'solana') {
-    return this.request(`/v1/smart-money/netflow?chain=${encodeURIComponent(chain)}`);
+  // Smart Money DEX Trades
+  async getSmartMoneyTrades(chains = ['ethereum', 'solana']) {
+    return this.request('/smart-money/dex-trades', {
+      body: { chains, pagination: { page: 1, per_page: 25 } }
+    });
   }
 
-  // Token God Mode: Token Flows
-  async getTokenFlows(chain, tokenAddress) {
-    return this.request(`/v1/token/${chain}/${tokenAddress}/flows`);
+  // Token God Mode: Flow Intelligence
+  async getFlowIntelligence(chain, tokenAddress) {
+    return this.request('/tgm/flow-intelligence', {
+      body: { chain, token_address: tokenAddress, timeframe: '7d' }
+    });
   }
 
-  // Token God Mode: Who Bought & Sold
-  async getWhoBoughtSold(chain, tokenAddress) {
-    return this.request(`/v1/token/${chain}/${tokenAddress}/who-bought-sold`);
+  // Token God Mode: Token Holders
+  async getTokenHolders(chain, tokenAddress) {
+    return this.request('/tgm/holders', {
+      body: { chain, token_address: tokenAddress, label_type: 'smart_money' }
+    });
   }
 
-  // Token God Mode: Jupiter DCAs (Solana specific automated liquidity pressure)
-  async getJupiterDcas(chain, tokenAddress) {
-    if (chain !== 'solana') return { active_dcas: [] };
-    return this.request(`/v1/token/solana/${tokenAddress}/jupiter-dcas`);
-  }
-
-  // Token God Mode: Perp Positions
-  async getPerpPositions(chain, tokenAddress) {
-    return this.request(`/v1/token/${chain}/${tokenAddress}/perp-positions`);
-  }
-
-  // Address Profiler: Counterparties
-  async getAddressCounterparties(chain, address) {
-    return this.request(`/v1/profiler/address/${address}/counterparties?chain=${chain}`);
-  }
-
-  // Address Profiler: Related Wallets
-  async getAddressRelatedWallets(chain, address) {
-    return this.request(`/v1/profiler/address/${address}/related-wallets?chain=${chain}`);
-  }
-
-  // Hyperliquid Leaderboard
-  async getHyperliquidLeaderboard() {
-    return this.request('/v1/profiler/hyperliquid/leaderboard');
+  // Profiler: Address Related Wallets
+  async getRelatedWallets(chain, address) {
+    return this.request('/profiler/address/related-wallets', {
+      body: { chain, address, pagination: { page: 1, per_page: 20 } }
+    });
   }
 }
 
