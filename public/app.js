@@ -247,8 +247,7 @@ document.addEventListener('DOMContentLoaded', () => {
     presetsContainer.innerHTML = '';
     FALLBACK_PRESETS.forEach((p, idx) => {
       const tab = document.createElement('div');
-      tab.className = `preset-tab ${idx === 0 ? 'active' : ''}`;
-      if (idx === 0) activeTabElement = tab;
+      tab.className = 'preset-tab';
 
       tab.innerHTML = `
         <div class="preset-info">
@@ -457,8 +456,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     currentReport = report;
 
-    if (report.interrogationLogs) {
-      report.interrogationLogs.forEach(line => appendLog(line));
+    if (report.interrogationLogs && report.interrogationLogs.length > 0) {
+      for (let i = 0; i < report.interrogationLogs.length; i++) {
+        appendLog(report.interrogationLogs[i]);
+        await new Promise(r => setTimeout(r, 120));
+      }
     }
 
     renderReport(report);
@@ -701,9 +703,6 @@ Surface the Signal. Built for Nansen Meridian Buildathon 2026.
     }
   });
 
-  // Initial Assembly and auto-run
+  // Initial Assembly
   assembleThesisText();
-  setTimeout(() => {
-    executeInterrogation({ presetId: 'cabal-solana-trap' });
-  }, 350);
 });
