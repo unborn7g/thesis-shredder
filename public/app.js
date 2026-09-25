@@ -238,9 +238,46 @@ document.addEventListener('DOMContentLoaded', () => {
   const runHarvestSampleBtn = document.getElementById('run-harvest-sample');
   const harvesterLog = document.getElementById('harvester-log');
 
+  // Share Modal Elements
+  const shareModal = document.getElementById('share-modal');
+  const closeShareModalBtn = document.getElementById('close-share-modal');
+  const shareXTextarea = document.getElementById('share-x-textarea');
+  const modalCopyXText = document.getElementById('modal-copy-x-text');
+  const modalOpenXBtn = document.getElementById('modal-open-x-btn');
+
   let currentReport = null;
   let activeTabElement = null;
   let currentDirection = 'LONG';
+
+  // Helper: Generate formatted X post text
+  function getXShareText() {
+    if (currentReport) {
+      return (
+        `Don't ask AI to confirm your thesis. Make data try to break it. ⚔️\n\n` +
+        `Audited my $${currentReport.targetToken.symbol} trade rationale through @nansen_ai Thesis Shredder for #MeridianBuildathon.\n` +
+        `🔥 Fragility Score: ${currentReport.shredScore}/100 (${currentReport.status})\n` +
+        `• Smart Money Netflow: ${currentReport.breakdown.smartMoneyDivergenceRisk}/35\n` +
+        `• Cabal Centrality Index: ${currentReport.dataPayload.cabalAnalysis.cabalCentralityIndex}%\n\n` +
+        `Surface the Signal. Protect your capital.\n` +
+        `https://github.com/unborn7g/thesis-shredder`
+      );
+    }
+    return (
+      `Don't ask AI to confirm your trades. Make data try to break them. ⚔️\n\n` +
+      `Auditing trade theses with Thesis Shredder — adversarial on-chain due diligence built for the @nansen_ai Meridian Buildathon.\n\n` +
+      `Surface the Signal. Protect your capital. #NansenMeridianBuildathon\n` +
+      `https://github.com/unborn7g/thesis-shredder`
+    );
+  }
+
+  function updateShareXLink() {
+    if (!shareXBtn) return;
+    const postText = getXShareText();
+    const xUrl = `https://x.com/intent/post?text=${encodeURIComponent(postText)}`;
+    shareXBtn.setAttribute('href', xUrl);
+    if (modalOpenXBtn) modalOpenXBtn.setAttribute('href', xUrl);
+    if (shareXTextarea) shareXTextarea.value = postText;
+  }
 
   // 1. Render Preset Case Studies
   function renderPresets() {
@@ -564,6 +601,9 @@ document.addEventListener('DOMContentLoaded', () => {
       `;
       evidenceList.appendChild(item);
     });
+
+    // Update X Share link with current report
+    updateShareXLink();
   }
 
   function animateValue(obj, start, end, duration) {
@@ -668,20 +708,71 @@ Surface the Signal. Built for Nansen Meridian Buildathon 2026.
   });
 
   // Share on X
-  shareXBtn.addEventListener('click', () => {
-    if (!currentReport) return;
-    const text = encodeURIComponent(
-      `Don't ask AI to confirm your thesis. Make it try to break it. ⚔️\n\n` +
-      `Tested my $${currentReport.targetToken.symbol} trade idea through @nansen_ai Thesis Shredder for #MeridianBuildathon.\n` +
-      `🔥 Result: Fragility Score ${currentReport.shredScore}/100 (${currentReport.status})\n\n` +
-      `Surface the Signal.`
-    );
-    window.open(`https://twitter.com/intent/tweet?text=${text}`, '_blank');
+  shareXBtn.addEventListener('click', (e) => {
+    updateShareXLink();
+    const postText = getXShareText();
+    const xUrl = `https://x.com/intent/post?text=${encodeURIComponent(postText)}`;
+
+    // 1. Copy to clipboard automatically so user has the text immediately
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(postText);
+      } else {
+        const ta = document.createElement('textarea');
+        ta.value = postText;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+    } catch (err) {
+      console.warn('Clipboard write failed:', err);
+    }
+
+    // 2. Open fallback modal with copy button & direct link in case browser / iframe blocks the tab
+    if (shareModal) {
+      if (shareXTextarea) shareXTextarea.value = postText;
+      if (modalOpenXBtn) modalOpenXBtn.setAttribute('href', xUrl);
+      shareModal.classList.remove('hidden');
+    }
+
+    // 3. Attempt window.open as popup / new tab
+    try {
+      const opened = window.open(xUrl, '_blank', 'noopener,noreferrer');
+      if (opened && !opened.closed) {
+        return;
+      }
+    } catch (err) {
+      console.warn('Popup blocked by browser or iframe sandbox:', err);
+    }
   });
 
-  // Modal Management
+  // Modal Management - API Modal
   openApiModalBtn.addEventListener('click', () => apiModal.classList.remove('hidden'));
   closeApiModalBtn.addEventListener('click', () => apiModal.classList.add('hidden'));
+
+  // Modal Management - Share Modal
+  if (closeShareModalBtn && shareModal) {
+    closeShareModalBtn.addEventListener('click', () => shareModal.classList.add('hidden'));
+  }
+  if (modalCopyXText && shareXTextarea) {
+    modalCopyXText.addEventListener('click', () => {
+      const postText = shareXTextarea.value;
+      navigator.clipboard.writeText(postText).then(() => {
+        const span = modalCopyXText.querySelector('span');
+        if (span) {
+          const oldText = span.innerText;
+          span.innerText = '✅ Copied to Clipboard!';
+          setTimeout(() => { span.innerText = oldText; }, 2000);
+        }
+      });
+    });
+  }
+
+  window.addEventListener('click', (e) => {
+    if (e.target === shareModal) shareModal.classList.add('hidden');
+    if (e.target === apiModal) apiModal.classList.add('hidden');
+  });
 
   // Harvester Simulation
   runHarvestSampleBtn.addEventListener('click', async () => {
@@ -705,4 +796,5 @@ Surface the Signal. Built for Nansen Meridian Buildathon 2026.
 
   // Initial Assembly
   assembleThesisText();
+  updateShareXLink();
 });

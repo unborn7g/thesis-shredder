@@ -1033,6 +1033,12 @@ canvas {
   cursor: pointer;
   transition: all 0.2s var(--ease-fluid);
   border: 1px solid var(--border-subtle);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-family: inherit;
+  box-sizing: border-box;
 }
 
 .secondary-btn {
