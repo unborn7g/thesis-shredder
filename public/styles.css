@@ -451,6 +451,144 @@ html, body {
 }
 
 /* ==========================================================================
+   Guided Thesis Builder Components
+   ========================================================================== */
+.builder-box {
+  background: var(--bg-input);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.builder-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.builder-badge {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 700;
+  color: var(--mint);
+  background: var(--mint-dim);
+  border: 1px solid var(--border-mint);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.builder-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-white);
+}
+
+.styled-select {
+  background: rgba(14, 18, 25, 0.95);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-white);
+  padding: 9px 12px;
+  border-radius: 8px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  cursor: pointer;
+  outline: none;
+}
+
+.styled-select:focus {
+  border-color: var(--mint);
+  box-shadow: 0 0 12px var(--mint-glow);
+}
+
+.segmented-control {
+  display: flex;
+  background: rgba(4, 5, 8, 0.9);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 3px;
+  gap: 4px;
+}
+
+.seg-btn {
+  flex: 1;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 7px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.seg-btn.active {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.seg-btn[data-dir="LONG"].active {
+  background: rgba(0, 255, 167, 0.15);
+  color: var(--mint);
+  border: 1px solid var(--border-mint);
+}
+
+.seg-btn[data-dir="SHORT"].active {
+  background: rgba(255, 34, 68, 0.15);
+  color: var(--red);
+  border: 1px solid rgba(255, 34, 68, 0.4);
+}
+
+.chips-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.driver-chip {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 11.5px;
+  font-family: var(--font-sans);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s var(--ease-fluid);
+}
+
+.driver-chip:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.driver-chip.active {
+  background: rgba(0, 255, 167, 0.12);
+  color: var(--mint);
+  border-color: var(--mint);
+  box-shadow: 0 0 10px var(--mint-glow);
+}
+
+.label-with-hint {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.hint-text {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-dim);
+}
+
+/* ==========================================================================
    Custom Form & Inputs
    ========================================================================== */
 .custom-form {

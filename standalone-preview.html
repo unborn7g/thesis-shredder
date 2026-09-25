@@ -458,6 +458,144 @@ html, body {
 }
 
 /* ==========================================================================
+   Guided Thesis Builder Components
+   ========================================================================== */
+.builder-box {
+  background: var(--bg-input);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.builder-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.builder-badge {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 700;
+  color: var(--mint);
+  background: var(--mint-dim);
+  border: 1px solid var(--border-mint);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.builder-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-white);
+}
+
+.styled-select {
+  background: rgba(14, 18, 25, 0.95);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-white);
+  padding: 9px 12px;
+  border-radius: 8px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  cursor: pointer;
+  outline: none;
+}
+
+.styled-select:focus {
+  border-color: var(--mint);
+  box-shadow: 0 0 12px var(--mint-glow);
+}
+
+.segmented-control {
+  display: flex;
+  background: rgba(4, 5, 8, 0.9);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 3px;
+  gap: 4px;
+}
+
+.seg-btn {
+  flex: 1;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 7px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.seg-btn.active {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.seg-btn[data-dir="LONG"].active {
+  background: rgba(0, 255, 167, 0.15);
+  color: var(--mint);
+  border: 1px solid var(--border-mint);
+}
+
+.seg-btn[data-dir="SHORT"].active {
+  background: rgba(255, 34, 68, 0.15);
+  color: var(--red);
+  border: 1px solid rgba(255, 34, 68, 0.4);
+}
+
+.chips-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.driver-chip {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 11.5px;
+  font-family: var(--font-sans);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s var(--ease-fluid);
+}
+
+.driver-chip:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.driver-chip.active {
+  background: rgba(0, 255, 167, 0.12);
+  color: var(--mint);
+  border-color: var(--mint);
+  box-shadow: 0 0 10px var(--mint-glow);
+}
+
+.label-with-hint {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.hint-text {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-dim);
+}
+
+/* ==========================================================================
    Custom Form & Inputs
    ========================================================================== */
 .custom-form {
@@ -1045,7 +1183,7 @@ canvas {
   <div class="ambient-glow-secondary"></div>
 
   <div class="app-shell">
-    <!-- Clean, Institutional Nansen Header (Zero Tacky Badges) -->
+    <!-- Institutional Nansen Header -->
     <header class="header">
       <div class="brand">
         <svg class="logo" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1067,7 +1205,7 @@ canvas {
       </nav>
     </header>
 
-    <!-- Editorial Hero Section -->
+    <!-- Editorial Hero -->
     <section class="hero-section">
       <div class="hero-badge">ADVERSARIAL ON-CHAIN DUE DILIGENCE</div>
       <h1 class="hero-heading">
@@ -1075,11 +1213,11 @@ canvas {
         <span class="hero-subheading">Make data break your thesis before the market does.</span>
       </h1>
       <p class="hero-copy">
-        Confirmation bias costs traders fortunes. Feed any trade rationale or token into 5 deterministic Nansen intelligence gauntlets to test smart money divergence, insider cabal clustering, and perp whale hedging.
+        Test any trade rationale across 5 deterministic Nansen intelligence gauntlets: Smart Money cohort netflows, insider cabal funding ancestry, and Hyperliquid perp whale positioning.
       </p>
     </section>
 
-    <!-- Bento Grid Core Application -->
+    <!-- Bento Grid Core -->
     <main class="bento-grid">
       <!-- Input Bento Card -->
       <section class="bento-card input-card">
@@ -1094,7 +1232,7 @@ canvas {
           </span>
         </div>
 
-        <!-- Segmented Preset Tabs -->
+        <!-- 1-Click Historical Case Studies -->
         <div class="presets-section">
           <div class="presets-label">VERIFIED CASE STUDIES (1-CLICK LOAD)</div>
           <div class="tabs-slider" id="presets-container">
@@ -1103,20 +1241,73 @@ canvas {
         </div>
 
         <div class="divider-line">
-          <span>OR CUSTOM THESIS</span>
+          <span>OR BUILD CUSTOM THESIS (GUIDED WIZARD)</span>
         </div>
 
-        <!-- Custom Form -->
+        <!-- Guided Custom Thesis Wizard -->
         <form id="shredder-form" class="custom-form">
-          <div class="input-field">
-            <label for="thesis-input" class="field-label">Trade Thesis & Entry Rationale</label>
-            <textarea id="thesis-input" rows="3" placeholder="Enter what you are trading and why (e.g. Longing $VIRTUAL for breakout on high spot volume, expecting smart money continuation...)" required></textarea>
+          <!-- Step A: Strategy Template Selector -->
+          <div class="builder-box">
+            <div class="builder-head">
+              <span class="builder-badge">STEP 1</span>
+              <span class="builder-title">Strategy Template</span>
+            </div>
+            <select id="template-select" class="styled-select">
+              <option value="" selected>-- Select a pre-built strategy template (Optional) --</option>
+              <option value="meme-breakout">🚀 Trending DEX Meme Breakout ($CATNIP / $WIF)</option>
+              <option value="ai-narrative">🤖 AI Agent Narrative Expansion ($VIRTUAL / $TAO)</option>
+              <option value="defi-bluechip">💎 DeFi Bluechip Institutional Accumulation ($AAVE)</option>
+              <option value="perp-squeeze">⚡ Hyperliquid Short Squeeze Contender</option>
+              <option value="custom">✍️ Freeform Custom Strategy</option>
+            </select>
           </div>
 
+          <!-- Step B: Trade Parameters -->
+          <div class="builder-box">
+            <div class="builder-head">
+              <span class="builder-badge">STEP 2</span>
+              <span class="builder-title">Trade Stance & Time Horizon</span>
+            </div>
+            <div class="form-row">
+              <div class="input-field flex-1">
+                <label class="field-label">Trade Stance</label>
+                <div class="segmented-control" id="direction-control">
+                  <button type="button" class="seg-btn active" data-dir="LONG">🟢 Long / Buy</button>
+                  <button type="button" class="seg-btn" data-dir="SHORT">🔴 Short / Hedge</button>
+                </div>
+              </div>
+              <div class="input-field flex-1">
+                <label for="horizon-select" class="field-label">Expected Horizon</label>
+                <select id="horizon-select">
+                  <option value="Scalp (< 24 Hours)">Scalp (&lt; 24h)</option>
+                  <option value="Swing (1 to 7 Days)" selected>Swing (1–7 Days)</option>
+                  <option value="Position (1 to 3 Months)">Position (1–3 Months)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step C: Entry Drivers / Catalyst Chips -->
+          <div class="builder-box">
+            <div class="builder-head">
+              <span class="builder-badge">STEP 3</span>
+              <span class="builder-title">Key Entry Drivers (Click to Toggle)</span>
+            </div>
+            <div class="chips-cloud" id="catalyst-chips">
+              <button type="button" class="driver-chip" data-text="DEX volume surged 300%+ with strong buy-side momentum">📈 Volume Surge</button>
+              <button type="button" class="driver-chip" data-text="Influencers & callers claim Smart Money is aggressively accumulating">🐋 Smart Money Rumor</button>
+              <button type="button" class="driver-chip" data-text="Catalyst event & protocol revenue fee-switch approaching">💎 Tokenomics Catalyst</button>
+              <button type="button" class="driver-chip" data-text="Holding horizontal multi-month support level">📊 Support Retest</button>
+              <button type="button" class="driver-chip" data-text="AI Agent narrative trending across Twitter & Base ecosystem">🤖 AI Narrative</button>
+              <button type="button" class="driver-chip" data-text="Hyperliquid open interest spike with negative funding rates">⚡ Perp OI Surge</button>
+            </div>
+          </div>
+
+          <!-- Step D: Asset & Chain Details -->
           <div class="form-row">
             <div class="input-field flex-1">
               <label for="token-symbol" class="field-label">Token Ticker</label>
-              <input type="text" id="token-symbol" placeholder="e.g. CATNIP" value="CATNIP">
+              <input type="text" id="token-symbol" placeholder="e.g. CATNIP, VIRTUAL, AAVE" value="CATNIP">
             </div>
             <div class="input-field flex-1">
               <label for="chain-select" class="field-label">Chain</label>
@@ -1131,12 +1322,20 @@ canvas {
           </div>
 
           <div class="input-field">
-            <label for="token-address" class="field-label">Contract / Mint Address (Optional)</label>
+            <label for="token-address" class="field-label">Contract / Mint Address (Optional for live API)</label>
             <input type="text" id="token-address" placeholder="e.g. 7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU" value="7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU">
           </div>
 
+          <!-- Assembled Thesis Text Area -->
+          <div class="input-field">
+            <div class="label-with-hint">
+              <label for="thesis-input" class="field-label">Assembled Trade Thesis & Rationale</label>
+              <span class="hint-text">Auto-assembles from your selections above, or edit freely</span>
+            </div>
+            <textarea id="thesis-input" rows="3" placeholder="Select options above or type your trade rationale..." required></textarea>
+          </div>
+
           <button type="submit" class="cta-shred-btn" id="shred-btn">
-            <span class="cta-glow"></span>
             <span class="cta-content">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
               <span>Shred Thesis // Run Nansen Gauntlets</span>
@@ -1144,7 +1343,7 @@ canvas {
           </button>
         </form>
 
-        <!-- Live Pipeline Telemetry Stream -->
+        <!-- Pipeline Telemetry Stream -->
         <div class="telemetry-card">
           <div class="telemetry-top">
             <span class="telem-title">PIPELINE TELEMETRY</span>
@@ -1152,7 +1351,7 @@ canvas {
           </div>
           <div class="telemetry-console" id="log-content">
             <div class="console-row dim">[SYSTEM] Ready. All 5 gauntlet vectors armed.</div>
-            <div class="console-row dim">[SYSTEM] Select a case study above or submit a custom thesis...</div>
+            <div class="console-row dim">[SYSTEM] Choose a preset or customize your thesis with the builder above...</div>
           </div>
         </div>
       </section>
@@ -1174,11 +1373,11 @@ canvas {
             </svg>
           </div>
           <h3>Surface The Signal</h3>
-          <p>Load one of the case studies on the left or enter your trade to trigger the adversarial audit.</p>
+          <p>Load a case study or build a custom thesis on the left to trigger the adversarial audit.</p>
         </div>
 
         <div id="results-content" class="results-content hidden">
-          <!-- Fluid Radial Score Card -->
+          <!-- Fluid Radial Score Banner -->
           <div class="score-banner" id="score-banner">
             <div class="radial-gauge-container">
               <svg class="radial-svg" viewBox="0 0 100 100">
@@ -1328,7 +1527,7 @@ canvas {
   </div>
 
   <script>
-// Thesis Shredder // Fluid Nansen Interactive Engine (Dual Backend + Client-Side Fallback)
+// Thesis Shredder // Fluid Nansen Interactive Engine & Guided Thesis Builder
 
 const FALLBACK_PRESETS = [
   {
@@ -1514,10 +1713,15 @@ const FALLBACK_PRESETS = [
 document.addEventListener('DOMContentLoaded', () => {
   const presetsContainer = document.getElementById('presets-container');
   const shredderForm = document.getElementById('shredder-form');
-  const thesisInput = document.getElementById('thesis-input');
+  const templateSelect = document.getElementById('template-select');
+  const directionBtns = document.querySelectorAll('.seg-btn');
+  const horizonSelect = document.getElementById('horizon-select');
+  const catalystChips = document.querySelectorAll('.driver-chip');
   const tokenSymbolInput = document.getElementById('token-symbol');
   const chainSelect = document.getElementById('chain-select');
   const tokenAddressInput = document.getElementById('token-address');
+  const thesisInput = document.getElementById('thesis-input');
+
   const logContent = document.getElementById('log-content');
   const resultsContent = document.getElementById('results-content');
   const emptyState = document.getElementById('empty-state');
@@ -1565,8 +1769,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let currentReport = null;
   let activeTabElement = null;
+  let currentDirection = 'LONG';
 
-  // Render Presets
+  // 1. Render Preset Case Studies
   function renderPresets() {
     presetsContainer.innerHTML = '';
     FALLBACK_PRESETS.forEach((p, idx) => {
@@ -1600,7 +1805,103 @@ document.addEventListener('DOMContentLoaded', () => {
 
   renderPresets();
 
-  // Form Submission
+  // 2. Guided Thesis Builder Logic
+  function assembleThesisText() {
+    const symbol = tokenSymbolInput.value.trim() || 'TARGET';
+    const chain = chainSelect.value;
+    const horizon = horizonSelect.value;
+    const stance = currentDirection === 'LONG' ? 'Longing / Accumulating' : 'Shorting / Hedging';
+
+    const selectedChips = Array.from(catalystChips)
+      .filter(c => c.classList.contains('active'))
+      .map(c => c.getAttribute('data-text'));
+
+    let thesis = `${stance} $${symbol} on ${chain.toUpperCase()} for a ${horizon}. `;
+    if (selectedChips.length > 0) {
+      thesis += `Key drivers: ${selectedChips.join('; ')}. `;
+    } else {
+      thesis += `Looking for on-chain smart money confirmation and cabal centrality verification. `;
+    }
+    thesis += `Testing thesis resilience against Nansen intelligence.`;
+
+    thesisInput.value = thesis;
+  }
+
+  // Direction Segmented Control
+  directionBtns.forEach(btn => {
+    btn.onclick = () => {
+      directionBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentDirection = btn.getAttribute('data-dir');
+      assembleThesisText();
+    };
+  });
+
+  // Horizon Change
+  horizonSelect.onchange = () => assembleThesisText();
+
+  // Token Symbol & Chain Change
+  tokenSymbolInput.oninput = () => assembleThesisText();
+  chainSelect.onchange = () => assembleThesisText();
+
+  // Catalyst Chips Toggle
+  catalystChips.forEach(chip => {
+    chip.onclick = () => {
+      chip.classList.toggle('active');
+      assembleThesisText();
+    };
+  });
+
+  // Template Quick Selector
+  templateSelect.onchange = () => {
+    const val = templateSelect.value;
+    catalystChips.forEach(c => c.classList.remove('active'));
+
+    if (val === 'meme-breakout') {
+      currentDirection = 'LONG';
+      directionBtns[0].classList.add('active');
+      directionBtns[1].classList.remove('active');
+      tokenSymbolInput.value = 'CATNIP';
+      chainSelect.value = 'solana';
+      tokenAddressInput.value = '7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU';
+      horizonSelect.value = 'Swing (1 to 7 Days)';
+      catalystChips[0].classList.add('active');
+      catalystChips[1].classList.add('active');
+    } else if (val === 'ai-narrative') {
+      currentDirection = 'LONG';
+      directionBtns[0].classList.add('active');
+      directionBtns[1].classList.remove('active');
+      tokenSymbolInput.value = 'VIRTUAL';
+      chainSelect.value = 'base';
+      tokenAddressInput.value = '0x0b3e328455c4059eeb9e3f84b5543f74e24e7e1b';
+      horizonSelect.value = 'Swing (1 to 7 Days)';
+      catalystChips[0].classList.add('active');
+      catalystChips[4].classList.add('active');
+    } else if (val === 'defi-bluechip') {
+      currentDirection = 'LONG';
+      directionBtns[0].classList.add('active');
+      directionBtns[1].classList.remove('active');
+      tokenSymbolInput.value = 'AAVE';
+      chainSelect.value = 'ethereum';
+      tokenAddressInput.value = '0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9';
+      horizonSelect.value = 'Position (1 to 3 Months)';
+      catalystChips[2].classList.add('active');
+      catalystChips[3].classList.add('active');
+    } else if (val === 'perp-squeeze') {
+      currentDirection = 'SHORT';
+      directionBtns[1].classList.add('active');
+      directionBtns[0].classList.remove('active');
+      tokenSymbolInput.value = 'BTC';
+      chainSelect.value = 'hyperliquid';
+      tokenAddressInput.value = '';
+      horizonSelect.value = 'Scalp (< 24 Hours)';
+      catalystChips[5].classList.add('active');
+    }
+
+    assembleThesisText();
+  };
+
+  // 3. Form Submission
   shredderForm.addEventListener('submit', (e) => {
     e.preventDefault();
     if (activeTabElement) activeTabElement.classList.remove('active');
@@ -1614,24 +1915,42 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Client-side fallback report generator
+  // Client-side fallback generator for custom inputs
   function getClientFallbackReport(payload) {
     if (payload.presetId) {
       const found = FALLBACK_PRESETS.find(p => p.id === payload.presetId);
       if (found) return found;
     }
+
     const text = (payload.thesisText || "").toLowerCase();
-    if (text.includes("perp") || text.includes("base") || text.includes("virtual")) {
-      return FALLBACK_PRESETS[1];
-    } else if (text.includes("aave") || text.includes("defi") || text.includes("support")) {
-      return FALLBACK_PRESETS[2];
+    const symbol = (payload.tokenSymbol || "").toUpperCase();
+
+    if (text.includes("perp") || text.includes("base") || text.includes("virtual") || text.includes("ai")) {
+      const clone = JSON.parse(JSON.stringify(FALLBACK_PRESETS[1]));
+      clone.targetToken.symbol = symbol || "VIRTUAL";
+      clone.userThesis = payload.thesisText || clone.userThesis;
+      return clone;
+    } else if (text.includes("aave") || text.includes("defi") || text.includes("support") || text.includes("institutional")) {
+      const clone = JSON.parse(JSON.stringify(FALLBACK_PRESETS[2]));
+      clone.targetToken.symbol = symbol || "AAVE";
+      clone.userThesis = payload.thesisText || clone.userThesis;
+      return clone;
     } else if (text.includes("wash") || text.includes("bot") || text.includes("arbitrum")) {
-      return FALLBACK_PRESETS[3];
+      const clone = JSON.parse(JSON.stringify(FALLBACK_PRESETS[3]));
+      clone.targetToken.symbol = symbol || "WASH";
+      clone.userThesis = payload.thesisText || clone.userThesis;
+      return clone;
     }
-    return FALLBACK_PRESETS[0];
+
+    // Default to cabal inspection
+    const clone = JSON.parse(JSON.stringify(FALLBACK_PRESETS[0]));
+    clone.targetToken.symbol = symbol || "CATNIP";
+    clone.targetToken.chain = payload.chain || "solana";
+    clone.userThesis = payload.thesisText || clone.userThesis;
+    return clone;
   }
 
-  // Execution Pipeline
+  // 4. Execution Pipeline
   async function executeInterrogation(payload) {
     emptyState.classList.add('hidden');
     resultsContent.classList.remove('hidden');
@@ -1682,7 +2001,7 @@ document.addEventListener('DOMContentLoaded', () => {
     logContent.scrollTop = logContent.scrollHeight;
   }
 
-  // Render Adversarial Results
+  // 5. Render Adversarial Results
   function renderReport(report) {
     const { shredScore, status, breakdown, verdict, dataPayload, counterArguments } = report;
 
@@ -1774,7 +2093,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Number count-up animation
   function animateValue(obj, start, end, duration) {
     let startTimestamp = null;
     const step = (timestamp) => {
@@ -1790,7 +2108,6 @@ document.addEventListener('DOMContentLoaded', () => {
     window.requestAnimationFrame(step);
   }
 
-  // Canvas Cabal Cluster Visualizer
   function drawCabalCluster(cabal) {
     const ctx = cabalCanvas.getContext('2d');
     const width = cabalCanvas.width;
@@ -1913,7 +2230,8 @@ Surface the Signal. Built for Nansen Meridian Buildathon 2026.
     }
   });
 
-  // Auto-run first preset on load
+  // Initial Assembly and auto-run
+  assembleThesisText();
   setTimeout(() => {
     executeInterrogation({ presetId: 'cabal-solana-trap' });
   }, 350);

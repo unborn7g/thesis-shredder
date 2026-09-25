@@ -1,4 +1,4 @@
-// Thesis Shredder // Fluid Nansen Interactive Engine (Dual Backend + Client-Side Fallback)
+// Thesis Shredder // Fluid Nansen Interactive Engine & Guided Thesis Builder
 
 const FALLBACK_PRESETS = [
   {
@@ -184,10 +184,15 @@ const FALLBACK_PRESETS = [
 document.addEventListener('DOMContentLoaded', () => {
   const presetsContainer = document.getElementById('presets-container');
   const shredderForm = document.getElementById('shredder-form');
-  const thesisInput = document.getElementById('thesis-input');
+  const templateSelect = document.getElementById('template-select');
+  const directionBtns = document.querySelectorAll('.seg-btn');
+  const horizonSelect = document.getElementById('horizon-select');
+  const catalystChips = document.querySelectorAll('.driver-chip');
   const tokenSymbolInput = document.getElementById('token-symbol');
   const chainSelect = document.getElementById('chain-select');
   const tokenAddressInput = document.getElementById('token-address');
+  const thesisInput = document.getElementById('thesis-input');
+
   const logContent = document.getElementById('log-content');
   const resultsContent = document.getElementById('results-content');
   const emptyState = document.getElementById('empty-state');
@@ -235,8 +240,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let currentReport = null;
   let activeTabElement = null;
+  let currentDirection = 'LONG';
 
-  // Render Presets
+  // 1. Render Preset Case Studies
   function renderPresets() {
     presetsContainer.innerHTML = '';
     FALLBACK_PRESETS.forEach((p, idx) => {
@@ -270,7 +276,103 @@ document.addEventListener('DOMContentLoaded', () => {
 
   renderPresets();
 
-  // Form Submission
+  // 2. Guided Thesis Builder Logic
+  function assembleThesisText() {
+    const symbol = tokenSymbolInput.value.trim() || 'TARGET';
+    const chain = chainSelect.value;
+    const horizon = horizonSelect.value;
+    const stance = currentDirection === 'LONG' ? 'Longing / Accumulating' : 'Shorting / Hedging';
+
+    const selectedChips = Array.from(catalystChips)
+      .filter(c => c.classList.contains('active'))
+      .map(c => c.getAttribute('data-text'));
+
+    let thesis = `${stance} $${symbol} on ${chain.toUpperCase()} for a ${horizon}. `;
+    if (selectedChips.length > 0) {
+      thesis += `Key drivers: ${selectedChips.join('; ')}. `;
+    } else {
+      thesis += `Looking for on-chain smart money confirmation and cabal centrality verification. `;
+    }
+    thesis += `Testing thesis resilience against Nansen intelligence.`;
+
+    thesisInput.value = thesis;
+  }
+
+  // Direction Segmented Control
+  directionBtns.forEach(btn => {
+    btn.onclick = () => {
+      directionBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentDirection = btn.getAttribute('data-dir');
+      assembleThesisText();
+    };
+  });
+
+  // Horizon Change
+  horizonSelect.onchange = () => assembleThesisText();
+
+  // Token Symbol & Chain Change
+  tokenSymbolInput.oninput = () => assembleThesisText();
+  chainSelect.onchange = () => assembleThesisText();
+
+  // Catalyst Chips Toggle
+  catalystChips.forEach(chip => {
+    chip.onclick = () => {
+      chip.classList.toggle('active');
+      assembleThesisText();
+    };
+  });
+
+  // Template Quick Selector
+  templateSelect.onchange = () => {
+    const val = templateSelect.value;
+    catalystChips.forEach(c => c.classList.remove('active'));
+
+    if (val === 'meme-breakout') {
+      currentDirection = 'LONG';
+      directionBtns[0].classList.add('active');
+      directionBtns[1].classList.remove('active');
+      tokenSymbolInput.value = 'CATNIP';
+      chainSelect.value = 'solana';
+      tokenAddressInput.value = '7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU';
+      horizonSelect.value = 'Swing (1 to 7 Days)';
+      catalystChips[0].classList.add('active');
+      catalystChips[1].classList.add('active');
+    } else if (val === 'ai-narrative') {
+      currentDirection = 'LONG';
+      directionBtns[0].classList.add('active');
+      directionBtns[1].classList.remove('active');
+      tokenSymbolInput.value = 'VIRTUAL';
+      chainSelect.value = 'base';
+      tokenAddressInput.value = '0x0b3e328455c4059eeb9e3f84b5543f74e24e7e1b';
+      horizonSelect.value = 'Swing (1 to 7 Days)';
+      catalystChips[0].classList.add('active');
+      catalystChips[4].classList.add('active');
+    } else if (val === 'defi-bluechip') {
+      currentDirection = 'LONG';
+      directionBtns[0].classList.add('active');
+      directionBtns[1].classList.remove('active');
+      tokenSymbolInput.value = 'AAVE';
+      chainSelect.value = 'ethereum';
+      tokenAddressInput.value = '0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9';
+      horizonSelect.value = 'Position (1 to 3 Months)';
+      catalystChips[2].classList.add('active');
+      catalystChips[3].classList.add('active');
+    } else if (val === 'perp-squeeze') {
+      currentDirection = 'SHORT';
+      directionBtns[1].classList.add('active');
+      directionBtns[0].classList.remove('active');
+      tokenSymbolInput.value = 'BTC';
+      chainSelect.value = 'hyperliquid';
+      tokenAddressInput.value = '';
+      horizonSelect.value = 'Scalp (< 24 Hours)';
+      catalystChips[5].classList.add('active');
+    }
+
+    assembleThesisText();
+  };
+
+  // 3. Form Submission
   shredderForm.addEventListener('submit', (e) => {
     e.preventDefault();
     if (activeTabElement) activeTabElement.classList.remove('active');
@@ -284,24 +386,42 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Client-side fallback report generator
+  // Client-side fallback generator for custom inputs
   function getClientFallbackReport(payload) {
     if (payload.presetId) {
       const found = FALLBACK_PRESETS.find(p => p.id === payload.presetId);
       if (found) return found;
     }
+
     const text = (payload.thesisText || "").toLowerCase();
-    if (text.includes("perp") || text.includes("base") || text.includes("virtual")) {
-      return FALLBACK_PRESETS[1];
-    } else if (text.includes("aave") || text.includes("defi") || text.includes("support")) {
-      return FALLBACK_PRESETS[2];
+    const symbol = (payload.tokenSymbol || "").toUpperCase();
+
+    if (text.includes("perp") || text.includes("base") || text.includes("virtual") || text.includes("ai")) {
+      const clone = JSON.parse(JSON.stringify(FALLBACK_PRESETS[1]));
+      clone.targetToken.symbol = symbol || "VIRTUAL";
+      clone.userThesis = payload.thesisText || clone.userThesis;
+      return clone;
+    } else if (text.includes("aave") || text.includes("defi") || text.includes("support") || text.includes("institutional")) {
+      const clone = JSON.parse(JSON.stringify(FALLBACK_PRESETS[2]));
+      clone.targetToken.symbol = symbol || "AAVE";
+      clone.userThesis = payload.thesisText || clone.userThesis;
+      return clone;
     } else if (text.includes("wash") || text.includes("bot") || text.includes("arbitrum")) {
-      return FALLBACK_PRESETS[3];
+      const clone = JSON.parse(JSON.stringify(FALLBACK_PRESETS[3]));
+      clone.targetToken.symbol = symbol || "WASH";
+      clone.userThesis = payload.thesisText || clone.userThesis;
+      return clone;
     }
-    return FALLBACK_PRESETS[0];
+
+    // Default to cabal inspection
+    const clone = JSON.parse(JSON.stringify(FALLBACK_PRESETS[0]));
+    clone.targetToken.symbol = symbol || "CATNIP";
+    clone.targetToken.chain = payload.chain || "solana";
+    clone.userThesis = payload.thesisText || clone.userThesis;
+    return clone;
   }
 
-  // Execution Pipeline
+  // 4. Execution Pipeline
   async function executeInterrogation(payload) {
     emptyState.classList.add('hidden');
     resultsContent.classList.remove('hidden');
@@ -352,7 +472,7 @@ document.addEventListener('DOMContentLoaded', () => {
     logContent.scrollTop = logContent.scrollHeight;
   }
 
-  // Render Adversarial Results
+  // 5. Render Adversarial Results
   function renderReport(report) {
     const { shredScore, status, breakdown, verdict, dataPayload, counterArguments } = report;
 
@@ -444,7 +564,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Number count-up animation
   function animateValue(obj, start, end, duration) {
     let startTimestamp = null;
     const step = (timestamp) => {
@@ -460,7 +579,6 @@ document.addEventListener('DOMContentLoaded', () => {
     window.requestAnimationFrame(step);
   }
 
-  // Canvas Cabal Cluster Visualizer
   function drawCabalCluster(cabal) {
     const ctx = cabalCanvas.getContext('2d');
     const width = cabalCanvas.width;
@@ -583,7 +701,8 @@ Surface the Signal. Built for Nansen Meridian Buildathon 2026.
     }
   });
 
-  // Auto-run first preset on load
+  // Initial Assembly and auto-run
+  assembleThesisText();
   setTimeout(() => {
     executeInterrogation({ presetId: 'cabal-solana-trap' });
   }, 350);
