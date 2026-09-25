@@ -1,0 +1,1721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Thesis Shredder — Surface The Signal // Nansen</title>
+  <style>
+/* ==========================================================================
+   NANSEN THESIS SHREDDER // LUXURY MINIMALIST DESIGN SYSTEM
+   Brand Tokens:
+   - Mint: #00FFA7
+   - Obsidian: #06080B
+   - Charcoal Card: #0E1117 / rgba(18, 22, 31, 0.7)
+   - Border Subtle: rgba(255, 255, 255, 0.08)
+   - Border Glow: rgba(0, 255, 167, 0.35)
+   - Alert Red: #FF2244
+   - Alert Amber: #FF7B2B
+   ========================================================================== */
+
+:root {
+  --bg-black: #050608;
+  --bg-card: rgba(14, 18, 25, 0.75);
+  --bg-card-hover: rgba(20, 26, 36, 0.9);
+  --bg-input: rgba(8, 11, 16, 0.85);
+
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-hover: rgba(255, 255, 255, 0.18);
+  --border-mint: rgba(0, 255, 167, 0.35);
+
+  --mint: #00ffa7;
+  --mint-glow: rgba(0, 255, 167, 0.25);
+  --mint-dim: rgba(0, 255, 167, 0.1);
+
+  --blue: #3064ff;
+  --blue-glow: rgba(48, 100, 255, 0.25);
+
+  --red: #ff2244;
+  --red-dim: rgba(255, 34, 68, 0.12);
+
+  --amber: #ff7b2b;
+  --amber-dim: rgba(255, 123, 43, 0.12);
+
+  --text-white: #ffffff;
+  --text-muted: #949fa6;
+  --text-dim: #545b63;
+
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  --ease-fluid: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  background-color: var(--bg-black);
+  color: var(--text-white);
+  font-family: var(--font-sans);
+  min-height: 100vh;
+  overflow-x: hidden;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Fluid Ambient Background Glows */
+.ambient-glow {
+  position: fixed;
+  top: -150px;
+  left: 10%;
+  width: 600px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(0, 255, 167, 0.05) 0%, transparent 70%);
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 0;
+  animation: floatGlow 14s ease-in-out infinite alternate;
+}
+
+.ambient-glow-secondary {
+  position: fixed;
+  bottom: -200px;
+  right: 5%;
+  width: 700px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(48, 100, 255, 0.06) 0%, transparent 70%);
+  filter: blur(100px);
+  pointer-events: none;
+  z-index: 0;
+  animation: floatGlow 18s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes floatGlow {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(40px, 30px) scale(1.15); }
+}
+
+.app-shell {
+  position: relative;
+  z-index: 1;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px 32px 60px;
+}
+
+@media (max-width: 768px) {
+  .app-shell {
+    padding: 16px 16px 40px;
+  }
+}
+
+/* ==========================================================================
+   Header (Clean, Refined, Zero Tacky Pills)
+   ========================================================================== */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 24px;
+  background: rgba(14, 18, 25, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-subtle);
+  border-radius: 14px;
+  margin-bottom: 32px;
+  transition: border-color 0.3s ease;
+}
+
+.header:hover {
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.logo {
+  width: 32px;
+  height: 32px;
+  filter: drop-shadow(0 0 10px rgba(0, 255, 167, 0.4));
+  transition: transform 0.4s var(--ease-fluid);
+}
+
+.brand:hover .logo {
+  transform: rotate(45deg);
+}
+
+.brand-names {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand-title {
+  font-size: 21px;
+  font-weight: 800;
+  letter-spacing: -0.6px;
+  color: #fff;
+}
+
+.product-tag {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--mint);
+  background: var(--mint-dim);
+  border: 1px solid var(--border-mint);
+  padding: 3px 8px;
+  border-radius: 6px;
+  letter-spacing: 0.8px;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.nav-link {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.nav-link:hover, .nav-link.active {
+  color: var(--text-white);
+}
+
+@media (max-width: 640px) {
+  .nav-link {
+    display: none;
+  }
+}
+
+.api-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-white);
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s var(--ease-fluid);
+}
+
+.api-btn:hover {
+  background: rgba(0, 255, 167, 0.08);
+  border-color: var(--mint);
+  color: var(--mint);
+}
+
+.api-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--mint);
+  box-shadow: 0 0 8px var(--mint);
+}
+
+/* ==========================================================================
+   Editorial Hero Section
+   ========================================================================== */
+.hero-section {
+  text-align: center;
+  max-width: 840px;
+  margin: 0 auto 36px;
+}
+
+.hero-badge {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--mint);
+  margin-bottom: 12px;
+}
+
+.hero-heading {
+  font-size: 40px;
+  font-weight: 800;
+  letter-spacing: -1.2px;
+  line-height: 1.15;
+  margin-bottom: 14px;
+}
+
+.hero-subheading {
+  color: var(--text-muted);
+  font-weight: 500;
+  font-size: 26px;
+  letter-spacing: -0.5px;
+}
+
+.hero-copy {
+  font-size: 14px;
+  color: var(--text-muted);
+  max-width: 680px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .hero-heading { font-size: 28px; }
+  .hero-subheading { font-size: 18px; }
+  .hero-copy { font-size: 13px; }
+}
+
+/* ==========================================================================
+   Bento Grid Architecture
+   ========================================================================== */
+.bento-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+@media (max-width: 1024px) {
+  .bento-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.bento-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--border-subtle);
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.bento-card:hover {
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-subtle);
+  margin-bottom: 20px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.card-num {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--mint);
+  background: var(--mint-dim);
+  padding: 3px 6px;
+  border-radius: 4px;
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+}
+
+.engine-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--mint);
+  background: var(--mint-dim);
+  border: 1px solid var(--border-mint);
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.pulse-indicator {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--mint);
+  animation: pulse 1.8s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.3; transform: scale(0.85); }
+}
+
+/* ==========================================================================
+   Segmented Presets (Fluid Tabs)
+   ========================================================================== */
+.presets-section {
+  margin-bottom: 18px;
+}
+
+.presets-label {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 0.8px;
+  margin-bottom: 8px;
+}
+
+.tabs-slider {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.preset-tab {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--bg-input);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  padding: 12px 14px;
+  cursor: pointer;
+  transition: all 0.25s var(--ease-fluid);
+  text-align: left;
+}
+
+.preset-tab:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--mint);
+  transform: translateX(3px);
+}
+
+.preset-tab.active {
+  background: rgba(0, 255, 167, 0.06);
+  border-color: var(--mint);
+}
+
+.preset-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.preset-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-white);
+}
+
+.preset-meta {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.preset-arrow {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--mint);
+  font-weight: 700;
+}
+
+.divider-line {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 18px 0;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-dim);
+}
+
+.divider-line::before, .divider-line::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.divider-line span {
+  padding: 0 10px;
+  letter-spacing: 0.5px;
+}
+
+/* ==========================================================================
+   Custom Form & Inputs
+   ========================================================================== */
+.custom-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.input-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.form-row {
+  display: flex;
+  gap: 12px;
+}
+
+.flex-1 { flex: 1; }
+
+input[type="text"], input[type="password"], textarea, select {
+  width: 100%;
+  background: var(--bg-input);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-white);
+  padding: 11px 14px;
+  border-radius: 8px;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  outline: none;
+  transition: all 0.2s var(--ease-fluid);
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: var(--mint);
+  box-shadow: 0 0 14px var(--mint-glow);
+}
+
+textarea {
+  resize: vertical;
+  line-height: 1.5;
+}
+
+/* Primary CTA Button */
+.cta-shred-btn {
+  position: relative;
+  overflow: hidden;
+  background: #00ffa7;
+  color: #06080b;
+  border: none;
+  border-radius: 10px;
+  padding: 14px 20px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s var(--ease-fluid);
+  box-shadow: 0 0 24px var(--mint-glow);
+  margin-top: 4px;
+}
+
+.cta-shred-btn:hover {
+  background: #2affb4;
+  box-shadow: 0 0 32px rgba(0, 255, 167, 0.45);
+  transform: translateY(-1px);
+}
+
+.cta-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* Telemetry Card */
+.telemetry-card {
+  background: #040507;
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-top: 18px;
+  font-family: var(--font-mono);
+}
+
+.telemetry-top {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding-bottom: 6px;
+  margin-bottom: 8px;
+  font-size: 10px;
+  color: var(--text-dim);
+}
+
+.telem-status {
+  color: var(--mint);
+  font-weight: 700;
+}
+
+.telemetry-console {
+  max-height: 110px;
+  overflow-y: auto;
+  font-size: 11px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.console-row {
+  line-height: 1.4;
+  color: var(--text-muted);
+}
+
+.console-row.dim { color: var(--text-dim); }
+
+/* ==========================================================================
+   Results Deck & Fluid Score Dial
+   ========================================================================== */
+.empty-state {
+  text-align: center;
+  padding: 70px 20px;
+  color: var(--text-dim);
+}
+
+.empty-compass-wrap {
+  margin-bottom: 14px;
+}
+
+.empty-state h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-white);
+  margin-bottom: 6px;
+}
+
+.empty-state p {
+  font-size: 13px;
+  max-width: 380px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.hidden { display: none !important; }
+
+/* Score Banner with Fluid Radial Gauge */
+.score-banner {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  background: var(--bg-input);
+  border: 1px solid rgba(255, 34, 68, 0.3);
+  border-radius: 12px;
+  padding: 18px 22px;
+  margin-bottom: 20px;
+  transition: all 0.3s ease;
+}
+
+.radial-gauge-container {
+  position: relative;
+  width: 95px;
+  height: 95px;
+  flex-shrink: 0;
+}
+
+.radial-svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.gauge-bg {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.08);
+  stroke-width: 8;
+}
+
+.gauge-fill {
+  fill: none;
+  stroke: var(--red);
+  stroke-width: 8;
+  stroke-linecap: round;
+  stroke-dasharray: 251.2;
+  stroke-dashoffset: 25.12;
+  transition: stroke-dashoffset 0.8s var(--ease-fluid), stroke 0.4s ease;
+}
+
+.radial-center-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.score-big {
+  font-family: var(--font-mono);
+  font-size: 26px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.score-sub {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text-dim);
+}
+
+.verdict-summary-box {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.verdict-top-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.verdict-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--red);
+  letter-spacing: 0.5px;
+}
+
+.action-tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: var(--red-dim);
+  color: #ff6b8b;
+  border: 1px solid rgba(255, 34, 68, 0.4);
+}
+
+.verdict-desc {
+  font-size: 13px;
+  color: var(--text-white);
+  line-height: 1.45;
+}
+
+/* Status Pill in Header */
+.status-pill {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: var(--bg-input);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+}
+
+/* ==========================================================================
+   Vulnerability Grid
+   ========================================================================== */
+.vulnerability-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 640px) {
+  .vulnerability-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.vector-card {
+  background: var(--bg-input);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 12px 14px;
+}
+
+.vector-head {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.vector-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.vector-pts {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-white);
+}
+
+.vector-track {
+  height: 6px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+
+.vector-fill {
+  height: 100%;
+  background: var(--mint);
+  border-radius: 3px;
+  transition: width 0.6s var(--ease-fluid), background-color 0.3s ease;
+}
+
+.vector-detail {
+  font-size: 11px;
+  color: var(--text-dim);
+  display: block;
+}
+
+/* ==========================================================================
+   Sub Panels & Canvas
+   ========================================================================== */
+.sub-panel {
+  margin-bottom: 18px;
+}
+
+.sub-panel-header {
+  margin-bottom: 8px;
+}
+
+.sub-heading {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 0.8px;
+}
+
+.canvas-wrapper {
+  background: #040507;
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 8px;
+  display: flex;
+  justify-content: center;
+}
+
+canvas {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.canvas-legend {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 6px;
+}
+
+.canvas-legend code {
+  background: rgba(0, 255, 167, 0.08);
+  color: var(--mint);
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+
+/* Evidence Container */
+.evidence-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.evidence-row {
+  background: var(--bg-input);
+  border-left: 3px solid var(--red);
+  padding: 10px 12px;
+  border-radius: 4px;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 12px;
+}
+
+.evidence-row.safe { border-left-color: var(--mint); }
+.evidence-row.warn { border-left-color: var(--amber); }
+
+.ev-tag {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 700;
+  color: var(--red);
+  min-width: 80px;
+}
+
+.evidence-row.safe .ev-tag { color: var(--mint); }
+.evidence-row.warn .ev-tag { color: var(--amber); }
+
+.ev-text {
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+/* Actions Row */
+.actions-row {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.action-btn {
+  flex: 1;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s var(--ease-fluid);
+  border: 1px solid var(--border-subtle);
+}
+
+.secondary-btn {
+  background: var(--bg-input);
+  color: var(--text-white);
+}
+
+.secondary-btn:hover {
+  border-color: rgba(255, 255, 255, 0.3);
+  background: var(--bg-card-hover);
+}
+
+.primary-btn {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--mint);
+  border-color: var(--mint);
+}
+
+.primary-btn:hover {
+  background: var(--mint);
+  color: #06080b;
+  box-shadow: 0 0 16px var(--mint-glow);
+}
+
+/* ==========================================================================
+   Modal Dialog
+   ========================================================================== */
+.modal-backdrop {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(4, 5, 8, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-window {
+  background: #0e1117;
+  border: 1px solid var(--border-mint);
+  border-radius: 16px;
+  width: 500px;
+  max-width: 90vw;
+  padding: 24px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 30px var(--mint-glow);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+}
+
+.modal-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.modal-title {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--mint);
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.close-btn:hover { color: var(--text-white); }
+
+.modal-text {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+
+.field-hint {
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-top: 4px;
+}
+
+.harvester-box {
+  background: var(--bg-input);
+  border: 1px dashed var(--border-subtle);
+  border-radius: 8px;
+  padding: 16px;
+  margin-top: 18px;
+}
+
+.harvester-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.harvester-label {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--mint);
+}
+
+.harvester-status {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  background: rgba(48, 100, 255, 0.2);
+  color: #7da0ff;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.harvester-info {
+  font-size: 12px;
+  color: var(--text-dim);
+  line-height: 1.4;
+  margin-bottom: 12px;
+}
+
+.full-width { width: 100%; }
+
+.console-box {
+  background: #040507;
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--mint);
+  margin-top: 10px;
+  max-height: 80px;
+  overflow-y: auto;
+}
+
+</style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="ambient-glow"></div>
+  <div class="ambient-glow-secondary"></div>
+
+  <div class="app-shell">
+    <!-- Clean, Institutional Nansen Header (Zero Tacky Badges) -->
+    <header class="header">
+      <div class="brand">
+        <svg class="logo" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M 37.644 20.754 C 35.803 19.544 33.789 18.479 31.606 17.558 C 30.711 17.189 30.086 16.683 29.731 16.038 C 29.376 15.393 29.289 14.584 29.474 13.611 C 30.053 10.769 30.238 8.046 30.026 5.441 C 29.814 2.836 28.843 1.217 27.106 0.587 L 26.474 0.351 C 24.632 -0.333 22.817 -0.018 21.027 1.297 C 19.237 2.614 17.639 4.376 16.232 6.586 C 15.048 8.445 13.981 10.378 13.039 12.371 C 12.336 12.245 11.631 12.132 10.924 12.031 C 7.792 11.636 5.321 11.604 3.504 11.932 C 1.689 12.262 0.649 12.926 0.386 13.926 L 0.071 15.071 C -0.193 15.993 0.281 17.011 1.491 18.129 C 2.701 19.248 3.977 20.201 5.319 20.991 C 6.661 21.806 7.594 22.774 8.121 23.891 C 8.647 25.009 8.844 26.449 8.712 28.213 C 8.527 30.581 8.699 32.784 9.226 34.823 C 9.752 36.861 10.857 38.158 12.541 38.709 L 13.487 39.024 C 14.987 39.524 16.559 39.058 18.204 37.623 C 19.847 36.188 21.461 34.064 23.039 31.249 C 23.666 30.153 24.293 28.916 24.921 27.541 C 26.318 27.754 27.673 27.908 28.979 27.993 C 32.018 28.189 34.478 28.071 36.359 27.638 C 38.239 27.204 39.313 26.539 39.576 25.644 L 39.931 24.343 C 40.246 23.159 39.483 21.961 37.643 20.751 Z" fill="#00FFA7"/>
+        </svg>
+        <div class="brand-names">
+          <span class="brand-title">nansen</span>
+          <span class="product-tag">THESIS SHREDDER</span>
+        </div>
+      </div>
+
+      <nav class="nav-links">
+        <a href="#vectors" class="nav-link active">Vectors</a>
+        <a href="#visualizer" class="nav-link">Cabal Profiler</a>
+        <button class="api-btn" id="open-api-modal">
+          <span class="api-dot"></span>
+          <span>API & Harvester</span>
+        </button>
+      </nav>
+    </header>
+
+    <!-- Editorial Hero Section -->
+    <section class="hero-section">
+      <div class="hero-badge">ADVERSARIAL ON-CHAIN DUE DILIGENCE</div>
+      <h1 class="hero-heading">
+        Surface the signal.<br>
+        <span class="hero-subheading">Make data break your thesis before the market does.</span>
+      </h1>
+      <p class="hero-copy">
+        Confirmation bias costs traders fortunes. Feed any trade rationale or token into 5 deterministic Nansen intelligence gauntlets to test smart money divergence, insider cabal clustering, and perp whale hedging.
+      </p>
+    </section>
+
+    <!-- Bento Grid Core Application -->
+    <main class="bento-grid">
+      <!-- Input Bento Card -->
+      <section class="bento-card input-card">
+        <div class="card-header">
+          <div class="header-left">
+            <span class="card-num">01</span>
+            <h2 class="card-title">Interrogation Desk</h2>
+          </div>
+          <span class="engine-status">
+            <span class="pulse-indicator"></span>
+            LIVE ENGINE
+          </span>
+        </div>
+
+        <!-- Segmented Preset Tabs -->
+        <div class="presets-section">
+          <div class="presets-label">VERIFIED CASE STUDIES (1-CLICK LOAD)</div>
+          <div class="tabs-slider" id="presets-container">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+        <div class="divider-line">
+          <span>OR CUSTOM THESIS</span>
+        </div>
+
+        <!-- Custom Form -->
+        <form id="shredder-form" class="custom-form">
+          <div class="input-field">
+            <label for="thesis-input" class="field-label">Trade Thesis & Entry Rationale</label>
+            <textarea id="thesis-input" rows="3" placeholder="Enter what you are trading and why (e.g. Longing $VIRTUAL for breakout on high spot volume, expecting smart money continuation...)" required></textarea>
+          </div>
+
+          <div class="form-row">
+            <div class="input-field flex-1">
+              <label for="token-symbol" class="field-label">Token Ticker</label>
+              <input type="text" id="token-symbol" placeholder="e.g. CATNIP" value="CATNIP">
+            </div>
+            <div class="input-field flex-1">
+              <label for="chain-select" class="field-label">Chain</label>
+              <select id="chain-select">
+                <option value="solana" selected>Solana</option>
+                <option value="base">Base</option>
+                <option value="ethereum">Ethereum</option>
+                <option value="arbitrum">Arbitrum</option>
+                <option value="hyperliquid">Hyperliquid (Perps)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="input-field">
+            <label for="token-address" class="field-label">Contract / Mint Address (Optional)</label>
+            <input type="text" id="token-address" placeholder="e.g. 7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU" value="7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU">
+          </div>
+
+          <button type="submit" class="cta-shred-btn" id="shred-btn">
+            <span class="cta-glow"></span>
+            <span class="cta-content">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+              <span>Shred Thesis // Run Nansen Gauntlets</span>
+            </span>
+          </button>
+        </form>
+
+        <!-- Live Pipeline Telemetry Stream -->
+        <div class="telemetry-card">
+          <div class="telemetry-top">
+            <span class="telem-title">PIPELINE TELEMETRY</span>
+            <span class="telem-status">STREAM ACTIVE</span>
+          </div>
+          <div class="telemetry-console" id="log-content">
+            <div class="console-row dim">[SYSTEM] Ready. All 5 gauntlet vectors armed.</div>
+            <div class="console-row dim">[SYSTEM] Select a case study above or submit a custom thesis...</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Output Bento Card -->
+      <section class="bento-card results-card" id="results-deck">
+        <div class="card-header">
+          <div class="header-left">
+            <span class="card-num">02</span>
+            <h2 class="card-title">Adversarial Synthesis</h2>
+          </div>
+          <div class="status-pill" id="verdict-indicator">AWAITING INPUT</div>
+        </div>
+
+        <div id="empty-state" class="empty-state">
+          <div class="empty-compass-wrap">
+            <svg viewBox="0 0 40 40" width="48" height="48" fill="#00FFA7" opacity="0.6">
+              <path d="M 37.644 20.754 C 35.803 19.544 33.789 18.479 31.606 17.558 C 30.711 17.189 30.086 16.683 29.731 16.038 C 29.376 15.393 29.289 14.584 29.474 13.611 C 30.053 10.769 30.238 8.046 30.026 5.441 C 29.814 2.836 28.843 1.217 27.106 0.587 L 26.474 0.351 C 24.632 -0.333 22.817 -0.018 21.027 1.297 C 19.237 2.614 17.639 4.376 16.232 6.586 C 15.048 8.445 13.981 10.378 13.039 12.371 C 12.336 12.245 11.631 12.132 10.924 12.031 C 7.792 11.636 5.321 11.604 3.504 11.932 C 1.689 12.262 0.649 12.926 0.386 13.926 L 0.071 15.071 C -0.193 15.993 0.281 17.011 1.491 18.129 C 2.701 19.248 3.977 20.201 5.319 20.991 C 6.661 21.806 7.594 22.774 8.121 23.891 C 8.647 25.009 8.844 26.449 8.712 28.213 C 8.527 30.581 8.699 32.784 9.226 34.823 C 9.752 36.861 10.857 38.158 12.541 38.709 L 13.487 39.024 C 14.987 39.524 16.559 39.058 18.204 37.623 C 19.847 36.188 21.461 34.064 23.039 31.249 C 23.666 30.153 24.293 28.916 24.921 27.541 C 26.318 27.754 27.673 27.908 28.979 27.993 C 32.018 28.189 34.478 28.071 36.359 27.638 C 38.239 27.204 39.313 26.539 39.576 25.644 L 39.931 24.343 C 40.246 23.159 39.483 21.961 37.643 20.751 Z"/>
+            </svg>
+          </div>
+          <h3>Surface The Signal</h3>
+          <p>Load one of the case studies on the left or enter your trade to trigger the adversarial audit.</p>
+        </div>
+
+        <div id="results-content" class="results-content hidden">
+          <!-- Fluid Radial Score Card -->
+          <div class="score-banner" id="score-banner">
+            <div class="radial-gauge-container">
+              <svg class="radial-svg" viewBox="0 0 100 100">
+                <circle class="gauge-bg" cx="50" cy="50" r="40"></circle>
+                <circle class="gauge-fill" id="radial-gauge-fill" cx="50" cy="50" r="40"></circle>
+              </svg>
+              <div class="radial-center-text">
+                <span class="score-big" id="shred-score-val">91</span>
+                <span class="score-sub">/ 100</span>
+              </div>
+            </div>
+
+            <div class="verdict-summary-box">
+              <div class="verdict-top-row">
+                <span class="verdict-label" id="verdict-banner">SHREDDED // HIGH RISK</span>
+                <span class="action-tag" id="verdict-recommendation">DO NOT ENTER</span>
+              </div>
+              <p class="verdict-desc" id="verdict-summary">
+                CRITICAL COMPROMISE: You are buying exit liquidity...
+              </p>
+            </div>
+          </div>
+
+          <!-- 4 Vulnerability Meters -->
+          <div class="vulnerability-grid" id="vectors">
+            <div class="vector-card">
+              <div class="vector-head">
+                <span class="vector-title">Smart Money Divergence</span>
+                <span class="vector-pts" id="sm-risk-val">35/35</span>
+              </div>
+              <div class="vector-track">
+                <div class="vector-fill" id="sm-risk-fill" style="width: 100%;"></div>
+              </div>
+              <span class="vector-detail" id="sm-risk-note">Cohort dumping (-$412,000)</span>
+            </div>
+
+            <div class="vector-card">
+              <div class="vector-head">
+                <span class="vector-title">Cabal Centrality</span>
+                <span class="vector-pts" id="cabal-risk-val">28/30</span>
+              </div>
+              <div class="vector-track">
+                <div class="vector-fill" id="cabal-risk-fill" style="width: 93%;"></div>
+              </div>
+              <span class="vector-detail" id="cabal-risk-note">Cabal Index: 92% (11 clustered wallets)</span>
+            </div>
+
+            <div class="vector-card">
+              <div class="vector-head">
+                <span class="vector-title">Perp Whale Hedging</span>
+                <span class="vector-pts" id="perp-risk-val">12/20</span>
+              </div>
+              <div class="vector-track">
+                <div class="vector-fill" id="perp-risk-fill" style="width: 60%;"></div>
+              </div>
+              <span class="vector-detail" id="perp-risk-note">Whales net short on Hyperliquid</span>
+            </div>
+
+            <div class="vector-card">
+              <div class="vector-head">
+                <span class="vector-title">Liquidity Bleed Risk</span>
+                <span class="vector-pts" id="liq-risk-val">15/15</span>
+              </div>
+              <div class="vector-track">
+                <div class="vector-fill" id="liq-risk-fill" style="width: 100%;"></div>
+              </div>
+              <span class="vector-detail" id="liq-risk-note">28 automated sell ladders firing</span>
+            </div>
+          </div>
+
+          <!-- Cabal Canvas Graph -->
+          <div class="sub-panel" id="visualizer">
+            <div class="sub-panel-header">
+              <span class="sub-heading">CABAL & SYBIL CLUSTER VISUALIZER</span>
+            </div>
+            <div class="canvas-wrapper">
+              <canvas id="cabal-canvas" width="600" height="190"></canvas>
+            </div>
+            <div class="canvas-legend" id="cluster-summary-text">
+              Funding Tree: <code>9WzD...AWWM</code> — Disperse.app multi-transfer 18 mins prior to pool initialization.
+            </div>
+          </div>
+
+          <!-- Evidence List -->
+          <div class="sub-panel">
+            <div class="sub-panel-header">
+              <span class="sub-heading">ADVERSARIAL EVIDENCE DOSSIER</span>
+            </div>
+            <div class="evidence-container" id="evidence-list">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+
+          <!-- Action Controls -->
+          <div class="actions-row">
+            <button class="action-btn secondary-btn" id="export-btn">
+              <span>Copy Due Diligence Dossier</span>
+            </button>
+            <button class="action-btn primary-btn" id="share-x-btn">
+              <span>Share Analysis on X</span>
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Modal for API & Harvester -->
+    <div class="modal-backdrop hidden" id="api-modal">
+      <div class="modal-window">
+        <div class="modal-header">
+          <div class="modal-brand">
+            <svg viewBox="0 0 40 40" width="20" height="20" fill="#00FFA7">
+              <path d="M 37.644 20.754 C 35.803 19.544 33.789 18.479 31.606 17.558 C 30.711 17.189 30.086 16.683 29.731 16.038 C 29.376 15.393 29.289 14.584 29.474 13.611 C 30.053 10.769 30.238 8.046 30.026 5.441 C 29.814 2.836 28.843 1.217 27.106 0.587 L 26.474 0.351 C 24.632 -0.333 22.817 -0.018 21.027 1.297 C 19.237 2.614 17.639 4.376 16.232 6.586 C 15.048 8.445 13.981 10.378 13.039 12.371 C 12.336 12.245 11.631 12.132 10.924 12.031 C 7.792 11.636 5.321 11.604 3.504 11.932 C 1.689 12.262 0.649 12.926 0.386 13.926 L 0.071 15.071 C -0.193 15.993 0.281 17.011 1.491 18.129 C 2.701 19.248 3.977 20.201 5.319 20.991 C 6.661 21.806 7.594 22.774 8.121 23.891 C 8.647 25.009 8.844 26.449 8.712 28.213 C 8.527 30.581 8.699 32.784 9.226 34.823 C 9.752 36.861 10.857 38.158 12.541 38.709 L 13.487 39.024 C 14.987 39.524 16.559 39.058 18.204 37.623 C 19.847 36.188 21.461 34.064 23.039 31.249 C 23.666 30.153 24.293 28.916 24.921 27.541 C 26.318 27.754 27.673 27.908 28.979 27.993 C 32.018 28.189 34.478 28.071 36.359 27.638 C 38.239 27.204 39.313 26.539 39.576 25.644 L 39.931 24.343 C 40.246 23.159 39.483 21.961 37.643 20.751 Z"/>
+            </svg>
+            <span class="modal-title">NANSEN API CONFIG & HARVESTER</span>
+          </div>
+          <button class="close-btn" id="close-api-modal">&times;</button>
+        </div>
+
+        <div class="modal-body">
+          <p class="modal-text">
+            Connect your Nansen API key for live queries, or run the automated harvester to satisfy the 1,000 calls qualification requirement.
+          </p>
+
+          <div class="input-field">
+            <label for="custom-api-key" class="field-label">Nansen API Key</label>
+            <input type="password" id="custom-api-key" placeholder="Enter key from app.nansen.ai/api">
+            <span class="field-hint">Leave blank to use pre-indexed historical snapshots across 6 chains.</span>
+          </div>
+
+          <div class="harvester-box">
+            <div class="harvester-header-row">
+              <span class="harvester-label">1,000 CALL BATCH HARVESTER</span>
+              <span class="harvester-status">QUALIFIER TOOL</span>
+            </div>
+            <p class="harvester-info">
+              Simulates automated polling across Token Screener and Smart Money Netflows to record logged calls to your Nansen dashboard.
+            </p>
+            <button class="cta-shred-btn full-width" id="run-harvest-sample">
+              <span>Execute 50 Sample Calls</span>
+            </button>
+            <div class="console-box" id="harvester-log">Harvester standing by...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+// Thesis Shredder // Fluid Nansen Interactive Engine
+
+document.addEventListener('DOMContentLoaded', () => {
+  const presetsContainer = document.getElementById('presets-container');
+  const shredderForm = document.getElementById('shredder-form');
+  const thesisInput = document.getElementById('thesis-input');
+  const tokenSymbolInput = document.getElementById('token-symbol');
+  const chainSelect = document.getElementById('chain-select');
+  const tokenAddressInput = document.getElementById('token-address');
+  const logContent = document.getElementById('log-content');
+  const resultsContent = document.getElementById('results-content');
+  const emptyState = document.getElementById('empty-state');
+  const verdictIndicator = document.getElementById('verdict-indicator');
+
+  // Score Elements
+  const shredScoreVal = document.getElementById('shred-score-val');
+  const radialGaugeFill = document.getElementById('radial-gauge-fill');
+  const scoreBanner = document.getElementById('score-banner');
+  const verdictBanner = document.getElementById('verdict-banner');
+  const verdictRecommendation = document.getElementById('verdict-recommendation');
+  const verdictSummary = document.getElementById('verdict-summary');
+
+  // Vulnerability Meters
+  const smRiskVal = document.getElementById('sm-risk-val');
+  const smRiskFill = document.getElementById('sm-risk-fill');
+  const smRiskNote = document.getElementById('sm-risk-note');
+
+  const cabalRiskVal = document.getElementById('cabal-risk-val');
+  const cabalRiskFill = document.getElementById('cabal-risk-fill');
+  const cabalRiskNote = document.getElementById('cabal-risk-note');
+
+  const perpRiskVal = document.getElementById('perp-risk-val');
+  const perpRiskFill = document.getElementById('perp-risk-fill');
+  const perpRiskNote = document.getElementById('perp-risk-note');
+
+  const liqRiskVal = document.getElementById('liq-risk-val');
+  const liqRiskFill = document.getElementById('liq-risk-fill');
+  const liqRiskNote = document.getElementById('liq-risk-note');
+
+  // Canvas & Details
+  const cabalCanvas = document.getElementById('cabal-canvas');
+  const clusterSummaryText = document.getElementById('cluster-summary-text');
+  const evidenceList = document.getElementById('evidence-list');
+
+  // Actions & Modal
+  const exportBtn = document.getElementById('export-btn');
+  const shareXBtn = document.getElementById('share-x-btn');
+  const openApiModalBtn = document.getElementById('open-api-modal');
+  const closeApiModalBtn = document.getElementById('close-api-modal');
+  const apiModal = document.getElementById('api-modal');
+  const customApiKeyInput = document.getElementById('custom-api-key');
+  const runHarvestSampleBtn = document.getElementById('run-harvest-sample');
+  const harvesterLog = document.getElementById('harvester-log');
+
+  let currentReport = null;
+  let activeTabElement = null;
+
+  // 1. Fetch Presets
+  async function loadPresets() {
+    try {
+      const res = await fetch('/api/presets');
+      const data = await res.json();
+      presetsContainer.innerHTML = '';
+
+      data.presets.forEach((p, idx) => {
+        const tab = document.createElement('div');
+        tab.className = `preset-tab ${idx === 0 ? 'active' : ''}`;
+        if (idx === 0) activeTabElement = tab;
+
+        tab.innerHTML = `
+          <div class="preset-info">
+            <span class="preset-title">${p.title}</span>
+            <span class="preset-meta">${p.token} • ${p.chain.toUpperCase()}</span>
+          </div>
+          <span class="preset-arrow">➔</span>
+        `;
+
+        tab.onclick = () => {
+          if (activeTabElement) activeTabElement.classList.remove('active');
+          tab.classList.add('active');
+          activeTabElement = tab;
+
+          thesisInput.value = p.userThesis;
+          tokenSymbolInput.value = p.token;
+          chainSelect.value = p.chain;
+          tokenAddressInput.value = p.id === 'cabal-solana-trap' ? '7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU' : '';
+          executeInterrogation({ presetId: p.id });
+        };
+
+        presetsContainer.appendChild(tab);
+      });
+    } catch (e) {
+      console.warn('Failed to load presets', e);
+    }
+  }
+
+  loadPresets();
+
+  // 2. Form Submission
+  shredderForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (activeTabElement) activeTabElement.classList.remove('active');
+
+    executeInterrogation({
+      thesisText: thesisInput.value,
+      tokenSymbol: tokenSymbolInput.value,
+      tokenAddress: tokenAddressInput.value,
+      chain: chainSelect.value,
+      customApiKey: customApiKeyInput.value.trim() || null
+    });
+  });
+
+  // 3. Execution Pipeline
+  async function executeInterrogation(payload) {
+    emptyState.classList.add('hidden');
+    resultsContent.classList.remove('hidden');
+    verdictIndicator.innerText = 'GAUNTLET EVALUATING';
+    verdictIndicator.style.borderColor = '#00ffa7';
+    verdictIndicator.style.color = '#00ffa7';
+
+    appendLog(`[NANSEN] Initiating adversarial evaluation...`);
+
+    try {
+      const res = await fetch('/api/interrogate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(payload.customApiKey ? { 'x-nansen-api-key': payload.customApiKey } : {})
+        },
+        body: JSON.stringify(payload)
+      });
+
+      const report = await res.json();
+      currentReport = report;
+
+      if (report.interrogationLogs) {
+        report.interrogationLogs.forEach(line => appendLog(line));
+      }
+
+      renderReport(report);
+    } catch (err) {
+      appendLog(`[ERROR] Interrogation pipeline failed: ${err.message}`);
+    }
+  }
+
+  function appendLog(text) {
+    const line = document.createElement('div');
+    line.className = 'console-row';
+    line.innerText = text;
+    logContent.appendChild(line);
+    logContent.scrollTop = logContent.scrollHeight;
+  }
+
+  // 4. Render Adversarial Results
+  function renderReport(report) {
+    const { shredScore, status, breakdown, verdict, dataPayload, counterArguments } = report;
+
+    // Animated Score Count-up
+    animateValue(shredScoreVal, parseInt(shredScoreVal.innerText) || 0, shredScore, 600);
+
+    // Update Radial SVG Gauge
+    const circumference = 251.327; // 2 * PI * 40
+    const offset = circumference * (1 - (shredScore / 100));
+    radialGaugeFill.style.strokeDashoffset = offset;
+
+    verdictIndicator.innerText = status;
+
+    if (status === 'SHREDDED') {
+      radialGaugeFill.style.stroke = '#ff2244';
+      shredScoreVal.style.color = '#ff2244';
+      scoreBanner.style.borderColor = 'rgba(255, 34, 68, 0.4)';
+      verdictBanner.innerText = 'SHREDDED // CRITICAL RISK';
+      verdictBanner.style.color = '#ff2244';
+      verdictRecommendation.innerText = 'DO NOT ENTER';
+      verdictRecommendation.style.background = 'rgba(255, 34, 68, 0.15)';
+      verdictRecommendation.style.color = '#ff6b8b';
+      verdictRecommendation.style.borderColor = 'rgba(255, 34, 68, 0.4)';
+    } else if (status === 'HIGH_FRICTION') {
+      radialGaugeFill.style.stroke = '#ff7b2b';
+      shredScoreVal.style.color = '#ff7b2b';
+      scoreBanner.style.borderColor = 'rgba(255, 123, 43, 0.4)';
+      verdictBanner.innerText = 'HIGH FRICTION // DIVERGENCE';
+      verdictBanner.style.color = '#ff7b2b';
+      verdictRecommendation.innerText = 'TIGHTEN STOPS / HEDGE';
+      verdictRecommendation.style.background = 'rgba(255, 123, 43, 0.15)';
+      verdictRecommendation.style.color = '#ffb700';
+      verdictRecommendation.style.borderColor = 'rgba(255, 123, 43, 0.4)';
+    } else {
+      radialGaugeFill.style.stroke = '#00ffa7';
+      shredScoreVal.style.color = '#00ffa7';
+      scoreBanner.style.borderColor = 'rgba(0, 255, 167, 0.4)';
+      verdictBanner.innerText = 'RESILIENT // DATA VERIFIED';
+      verdictBanner.style.color = '#00ffa7';
+      verdictRecommendation.innerText = 'THESIS VALIDATED';
+      verdictRecommendation.style.background = 'rgba(0, 255, 167, 0.15)';
+      verdictRecommendation.style.color = '#00ffa7';
+      verdictRecommendation.style.borderColor = 'rgba(0, 255, 167, 0.4)';
+    }
+
+    verdictSummary.innerText = verdict.summary;
+
+    // Vulnerability Fill Bars
+    smRiskVal.innerText = `${breakdown.smartMoneyDivergenceRisk}/35`;
+    smRiskFill.style.width = `${(breakdown.smartMoneyDivergenceRisk / 35) * 100}%`;
+    smRiskFill.style.backgroundColor = breakdown.smartMoneyDivergenceRisk > 20 ? '#ff2244' : '#00ffa7';
+    smRiskNote.innerText = dataPayload.smartMoney.netflow24hUsd < 0
+      ? `Cohort dumping (-$${Math.abs(dataPayload.smartMoney.netflow24hUsd).toLocaleString()})`
+      : `Cohort accumulation (+$${dataPayload.smartMoney.netflow24hUsd.toLocaleString()})`;
+
+    cabalRiskVal.innerText = `${breakdown.cabalCentralityRisk}/30`;
+    cabalRiskFill.style.width = `${(breakdown.cabalCentralityRisk / 30) * 100}%`;
+    cabalRiskFill.style.backgroundColor = breakdown.cabalCentralityRisk > 15 ? '#ff2244' : '#00ffa7';
+    cabalRiskNote.innerText = `Cabal Index: ${dataPayload.cabalAnalysis.cabalCentralityIndex}% (${dataPayload.cabalAnalysis.clusteredWallets} clustered wallets)`;
+
+    perpRiskVal.innerText = `${breakdown.perpWhaleDivergenceRisk}/20`;
+    perpRiskFill.style.width = `${(breakdown.perpWhaleDivergenceRisk / 20) * 100}%`;
+    perpRiskFill.style.backgroundColor = breakdown.perpWhaleDivergenceRisk > 10 ? '#ff7b2b' : '#00ffa7';
+    perpRiskNote.innerText = dataPayload.perpsAndDerivatives.hasPerps
+      ? `Perp Whales: ${dataPayload.perpsAndDerivatives.perpSentiment}`
+      : 'No active Hyperliquid perp pool';
+
+    liqRiskVal.innerText = `${breakdown.liquidityDrainRisk}/15`;
+    liqRiskFill.style.width = `${(breakdown.liquidityDrainRisk / 15) * 100}%`;
+    liqRiskFill.style.backgroundColor = breakdown.liquidityDrainRisk > 5 ? '#ff2244' : '#00ffa7';
+    liqRiskNote.innerText = dataPayload.automatedExecution.jupiterDcaSellingDetected
+      ? `${dataPayload.automatedExecution.activeSellOrdersCount} automated sell ladders firing`
+      : 'Normal liquidity cadence';
+
+    // Draw Cabal Cluster
+    drawCabalCluster(dataPayload.cabalAnalysis);
+    clusterSummaryText.innerHTML = `Funding Tree: <code>${dataPayload.cabalAnalysis.rootFunderAddress}</code> — ${dataPayload.cabalAnalysis.fundingPattern}`;
+
+    // Evidence Dossier
+    evidenceList.innerHTML = '';
+    counterArguments.forEach(arg => {
+      const item = document.createElement('div');
+      item.className = `evidence-row ${arg.severity === 'CRITICAL' ? '' : (arg.severity === 'HIGH' ? 'warn' : 'safe')}`;
+      item.innerHTML = `
+        <span class="ev-tag">[${arg.vector}]</span>
+        <span class="ev-text">${arg.text}</span>
+      `;
+      evidenceList.appendChild(item);
+    });
+  }
+
+  // Number count-up animation
+  function animateValue(obj, start, end, duration) {
+    let startTimestamp = null;
+    const step = (timestamp) => {
+      if (!startTimestamp) startTimestamp = timestamp;
+      const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+      obj.innerText = Math.floor(progress * (end - start) + start);
+      if (progress < 1) {
+        window.requestAnimationFrame(step);
+      } else {
+        obj.innerText = end;
+      }
+    };
+    window.requestAnimationFrame(step);
+  }
+
+  // 5. Canvas Cabal Cluster Visualizer
+  function drawCabalCluster(cabal) {
+    const ctx = cabalCanvas.getContext('2d');
+    const width = cabalCanvas.width;
+    const height = cabalCanvas.height;
+
+    ctx.clearRect(0, 0, width, height);
+
+    const isHighRisk = cabal.cabalCentralityIndex > 50;
+    const centerX = width / 2;
+    const centerY = height / 2;
+
+    // Draw Root Node
+    ctx.beginPath();
+    ctx.arc(centerX, centerY, 13, 0, Math.PI * 2);
+    ctx.fillStyle = isHighRisk ? '#ff2244' : '#00ffa7';
+    ctx.shadowBlur = 18;
+    ctx.shadowColor = isHighRisk ? '#ff2244' : '#00ffa7';
+    ctx.fill();
+    ctx.shadowBlur = 0;
+
+    // Root Label
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '10px "JetBrains Mono", monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText(isHighRisk ? 'DISPERSE ROOT' : 'ORGANIC SOURCE', centerX, centerY - 17);
+
+    // Satellites
+    const walletCount = cabal.analyzedTopHolders || 14;
+    const radius = 64;
+
+    for (let i = 0; i < walletCount; i++) {
+      const angle = (i / walletCount) * Math.PI * 2;
+      const x = centerX + Math.cos(angle) * (radius + (i % 2 === 0 ? 15 : -10));
+      const y = centerY + Math.sin(angle) * (radius + (i % 2 === 0 ? 15 : -10));
+
+      const isPuppet = isHighRisk && (i < cabal.clusteredWallets);
+
+      // Curved Line
+      ctx.beginPath();
+      ctx.moveTo(centerX, centerY);
+      ctx.quadraticCurveTo(
+        (centerX + x) / 2 + (i % 2 === 0 ? 10 : -10),
+        (centerY + y) / 2 + (i % 2 === 0 ? -10 : 10),
+        x, y
+      );
+      ctx.strokeStyle = isPuppet ? 'rgba(255, 34, 68, 0.45)' : 'rgba(0, 255, 167, 0.25)';
+      ctx.lineWidth = isPuppet ? 1.6 : 0.9;
+      ctx.stroke();
+
+      // Satellite Dot
+      ctx.beginPath();
+      ctx.arc(x, y, isPuppet ? 6 : 4, 0, Math.PI * 2);
+      ctx.fillStyle = isPuppet ? '#ff2244' : '#00ffa7';
+      ctx.shadowBlur = isPuppet ? 8 : 4;
+      ctx.shadowColor = isPuppet ? '#ff2244' : '#00ffa7';
+      ctx.fill();
+      ctx.shadowBlur = 0;
+    }
+  }
+
+  // 6. Copy Dossier
+  exportBtn.addEventListener('click', () => {
+    if (!currentReport) return;
+    const dossierText = `
+=== NANSEN THESIS SHREDDER REPORT ===
+Asset: ${currentReport.targetToken.symbol} (${currentReport.targetToken.chain})
+Thesis: "${currentReport.userThesis}"
+
+SHRED SCORE: ${currentReport.shredScore}/100 [${currentReport.status}]
+Directive: ${currentReport.verdict.summary}
+
+Nansen Intelligence Vectors:
+- Smart Money Divergence: ${currentReport.breakdown.smartMoneyDivergenceRisk}/35
+- Cabal Centrality Index: ${currentReport.dataPayload.cabalAnalysis.cabalCentralityIndex}%
+- Perp Whale Hedging: ${currentReport.breakdown.perpWhaleDivergenceRisk}/20
+- Liquidity Drain Risk: ${currentReport.breakdown.liquidityDrainRisk}/15
+
+Surface the Signal. Built for Nansen Meridian Buildathon 2026.
+    `.trim();
+
+    navigator.clipboard.writeText(dossierText).then(() => {
+      exportBtn.innerText = '✅ Copied to Clipboard';
+      setTimeout(() => { exportBtn.innerText = 'Copy Due Diligence Dossier'; }, 2000);
+    });
+  });
+
+  // 7. Share on X
+  shareXBtn.addEventListener('click', () => {
+    if (!currentReport) return;
+    const text = encodeURIComponent(
+      `Don't ask AI to confirm your thesis. Make it try to break it. ⚔️\n\n` +
+      `Tested my $${currentReport.targetToken.symbol} trade idea through @nansen_ai Thesis Shredder for #MeridianBuildathon.\n` +
+      `🔥 Result: Fragility Score ${currentReport.shredScore}/100 (${currentReport.status})\n\n` +
+      `Surface the Signal.`
+    );
+    window.open(`https://twitter.com/intent/tweet?text=${text}`, '_blank');
+  });
+
+  // 8. Modal Management
+  openApiModalBtn.addEventListener('click', () => apiModal.classList.remove('hidden'));
+  closeApiModalBtn.addEventListener('click', () => apiModal.classList.add('hidden'));
+
+  // 9. Harvester Simulation
+  runHarvestSampleBtn.addEventListener('click', async () => {
+    runHarvestSampleBtn.innerText = 'Logging 50 Nansen API calls...';
+    try {
+      const res = await fetch('/api/harvest-sample', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ count: 50 })
+      });
+      const data = await res.json();
+      harvesterLog.innerHTML = data.logs.slice(0, 8).join('<br/>') + `<br/>... Successfully logged ${data.callsExecuted} calls.`;
+      runHarvestSampleBtn.innerText = 'Batch Complete (50 Calls Logged)';
+    } catch (e) {
+      harvesterLog.innerText = 'Harvest failed: ' + e.message;
+      runHarvestSampleBtn.innerText = 'Execute 50 Sample Calls';
+    }
+  });
+
+  // Auto-run first preset on load
+  setTimeout(() => {
+    executeInterrogation({ presetId: 'cabal-solana-trap' });
+  }, 350);
+});
+
+</script>
+</body>
+</html>

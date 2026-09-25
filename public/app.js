@@ -1,4 +1,4 @@
-// Thesis Shredder // Official Nansen Buildathon Frontend Logic
+// Thesis Shredder // Fluid Nansen Interactive Engine
 
 document.addEventListener('DOMContentLoaded', () => {
   const presetsContainer = document.getElementById('presets-container');
@@ -12,14 +12,15 @@ document.addEventListener('DOMContentLoaded', () => {
   const emptyState = document.getElementById('empty-state');
   const verdictIndicator = document.getElementById('verdict-indicator');
 
-  // Score elements
+  // Score Elements
   const shredScoreVal = document.getElementById('shred-score-val');
+  const radialGaugeFill = document.getElementById('radial-gauge-fill');
+  const scoreBanner = document.getElementById('score-banner');
   const verdictBanner = document.getElementById('verdict-banner');
-  const verdictSummary = document.getElementById('verdict-summary');
   const verdictRecommendation = document.getElementById('verdict-recommendation');
-  const verdictCard = document.getElementById('verdict-card');
+  const verdictSummary = document.getElementById('verdict-summary');
 
-  // Vulnerability bars
+  // Vulnerability Meters
   const smRiskVal = document.getElementById('sm-risk-val');
   const smRiskFill = document.getElementById('sm-risk-fill');
   const smRiskNote = document.getElementById('sm-risk-note');
@@ -41,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const clusterSummaryText = document.getElementById('cluster-summary-text');
   const evidenceList = document.getElementById('evidence-list');
 
-  // Buttons & Modals
+  // Actions & Modal
   const exportBtn = document.getElementById('export-btn');
   const shareXBtn = document.getElementById('share-x-btn');
   const openApiModalBtn = document.getElementById('open-api-modal');
@@ -52,6 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const harvesterLog = document.getElementById('harvester-log');
 
   let currentReport = null;
+  let activeTabElement = null;
 
   // 1. Fetch Presets
   async function loadPresets() {
@@ -60,19 +62,32 @@ document.addEventListener('DOMContentLoaded', () => {
       const data = await res.json();
       presetsContainer.innerHTML = '';
 
-      data.presets.forEach(p => {
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'preset-btn';
-        btn.innerHTML = `<span>${p.title}</span><span style="color:#00ffa7;font-size:11px;">EVALUATE ➔</span>`;
-        btn.addEventListener('click', () => {
+      data.presets.forEach((p, idx) => {
+        const tab = document.createElement('div');
+        tab.className = `preset-tab ${idx === 0 ? 'active' : ''}`;
+        if (idx === 0) activeTabElement = tab;
+
+        tab.innerHTML = `
+          <div class="preset-info">
+            <span class="preset-title">${p.title}</span>
+            <span class="preset-meta">${p.token} • ${p.chain.toUpperCase()}</span>
+          </div>
+          <span class="preset-arrow">➔</span>
+        `;
+
+        tab.onclick = () => {
+          if (activeTabElement) activeTabElement.classList.remove('active');
+          tab.classList.add('active');
+          activeTabElement = tab;
+
           thesisInput.value = p.userThesis;
           tokenSymbolInput.value = p.token;
           chainSelect.value = p.chain;
           tokenAddressInput.value = p.id === 'cabal-solana-trap' ? '7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU' : '';
           executeInterrogation({ presetId: p.id });
-        });
-        presetsContainer.appendChild(btn);
+        };
+
+        presetsContainer.appendChild(tab);
       });
     } catch (e) {
       console.warn('Failed to load presets', e);
@@ -84,6 +99,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // 2. Form Submission
   shredderForm.addEventListener('submit', (e) => {
     e.preventDefault();
+    if (activeTabElement) activeTabElement.classList.remove('active');
+
     executeInterrogation({
       thesisText: thesisInput.value,
       tokenSymbol: tokenSymbolInput.value,
@@ -97,10 +114,11 @@ document.addEventListener('DOMContentLoaded', () => {
   async function executeInterrogation(payload) {
     emptyState.classList.add('hidden');
     resultsContent.classList.remove('hidden');
-    verdictIndicator.className = 'chip-badge chip-live';
     verdictIndicator.innerText = 'GAUNTLET EVALUATING';
+    verdictIndicator.style.borderColor = '#00ffa7';
+    verdictIndicator.style.color = '#00ffa7';
 
-    appendLog(`[NANSEN] Deploying 5 adversarial gauntlet vectors...`);
+    appendLog(`[NANSEN] Initiating adversarial evaluation...`);
 
     try {
       const res = await fetch('/api/interrogate', {
@@ -115,7 +133,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const report = await res.json();
       currentReport = report;
 
-      // Stream logs
       if (report.interrogationLogs) {
         report.interrogationLogs.forEach(line => appendLog(line));
       }
@@ -128,7 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function appendLog(text) {
     const line = document.createElement('div');
-    line.className = 't-line';
+    line.className = 'console-row';
     line.innerText = text;
     logContent.appendChild(line);
     logContent.scrollTop = logContent.scrollHeight;
@@ -138,78 +155,78 @@ document.addEventListener('DOMContentLoaded', () => {
   function renderReport(report) {
     const { shredScore, status, breakdown, verdict, dataPayload, counterArguments } = report;
 
-    shredScoreVal.innerText = shredScore;
+    // Animated Score Count-up
+    animateValue(shredScoreVal, parseInt(shredScoreVal.innerText) || 0, shredScore, 600);
+
+    // Update Radial SVG Gauge
+    const circumference = 251.327; // 2 * PI * 40
+    const offset = circumference * (1 - (shredScore / 100));
+    radialGaugeFill.style.strokeDashoffset = offset;
+
     verdictIndicator.innerText = status;
 
     if (status === 'SHREDDED') {
+      radialGaugeFill.style.stroke = '#ff2244';
       shredScoreVal.style.color = '#ff2244';
-      verdictBanner.className = 'status-pill';
+      scoreBanner.style.borderColor = 'rgba(255, 34, 68, 0.4)';
       verdictBanner.innerText = 'SHREDDED // CRITICAL RISK';
-      verdictBanner.style.borderColor = '#ff2244';
       verdictBanner.style.color = '#ff2244';
-      verdictBanner.style.background = 'rgba(255, 34, 68, 0.15)';
-      verdictCard.style.borderColor = 'rgba(255, 34, 68, 0.4)';
-      verdictRecommendation.className = 'recommend-pill';
-      verdictRecommendation.style.background = 'rgba(255, 34, 68, 0.2)';
+      verdictRecommendation.innerText = 'DO NOT ENTER';
+      verdictRecommendation.style.background = 'rgba(255, 34, 68, 0.15)';
       verdictRecommendation.style.color = '#ff6b8b';
-      verdictRecommendation.style.borderColor = '#ff6b8b';
+      verdictRecommendation.style.borderColor = 'rgba(255, 34, 68, 0.4)';
     } else if (status === 'HIGH_FRICTION') {
+      radialGaugeFill.style.stroke = '#ff7b2b';
       shredScoreVal.style.color = '#ff7b2b';
-      verdictBanner.className = 'status-pill';
+      scoreBanner.style.borderColor = 'rgba(255, 123, 43, 0.4)';
       verdictBanner.innerText = 'HIGH FRICTION // DIVERGENCE';
-      verdictBanner.style.borderColor = '#ff7b2b';
       verdictBanner.style.color = '#ff7b2b';
-      verdictBanner.style.background = 'rgba(255, 123, 43, 0.15)';
-      verdictCard.style.borderColor = 'rgba(255, 123, 43, 0.4)';
-      verdictRecommendation.className = 'recommend-pill';
-      verdictRecommendation.style.background = 'rgba(255, 123, 43, 0.2)';
+      verdictRecommendation.innerText = 'TIGHTEN STOPS / HEDGE';
+      verdictRecommendation.style.background = 'rgba(255, 123, 43, 0.15)';
       verdictRecommendation.style.color = '#ffb700';
-      verdictRecommendation.style.borderColor = '#ffb700';
+      verdictRecommendation.style.borderColor = 'rgba(255, 123, 43, 0.4)';
     } else {
+      radialGaugeFill.style.stroke = '#00ffa7';
       shredScoreVal.style.color = '#00ffa7';
-      verdictBanner.className = 'status-pill';
+      scoreBanner.style.borderColor = 'rgba(0, 255, 167, 0.4)';
       verdictBanner.innerText = 'RESILIENT // DATA VERIFIED';
-      verdictBanner.style.borderColor = '#00ffa7';
       verdictBanner.style.color = '#00ffa7';
-      verdictBanner.style.background = 'rgba(0, 255, 167, 0.15)';
-      verdictCard.style.borderColor = 'rgba(0, 255, 167, 0.4)';
-      verdictRecommendation.className = 'recommend-pill';
-      verdictRecommendation.style.background = 'rgba(0, 255, 167, 0.2)';
+      verdictRecommendation.innerText = 'THESIS VALIDATED';
+      verdictRecommendation.style.background = 'rgba(0, 255, 167, 0.15)';
       verdictRecommendation.style.color = '#00ffa7';
-      verdictRecommendation.style.borderColor = '#00ffa7';
+      verdictRecommendation.style.borderColor = 'rgba(0, 255, 167, 0.4)';
     }
 
     verdictSummary.innerText = verdict.summary;
-    verdictRecommendation.innerText = verdict.actionableRecommendation;
 
-    // Gauges
+    // Vulnerability Fill Bars
     smRiskVal.innerText = `${breakdown.smartMoneyDivergenceRisk}/35`;
     smRiskFill.style.width = `${(breakdown.smartMoneyDivergenceRisk / 35) * 100}%`;
-    smRiskFill.className = breakdown.smartMoneyDivergenceRisk > 20 ? 'meter-bar bar-danger' : 'meter-bar bar-safe';
+    smRiskFill.style.backgroundColor = breakdown.smartMoneyDivergenceRisk > 20 ? '#ff2244' : '#00ffa7';
     smRiskNote.innerText = dataPayload.smartMoney.netflow24hUsd < 0
       ? `Cohort dumping (-$${Math.abs(dataPayload.smartMoney.netflow24hUsd).toLocaleString()})`
       : `Cohort accumulation (+$${dataPayload.smartMoney.netflow24hUsd.toLocaleString()})`;
 
     cabalRiskVal.innerText = `${breakdown.cabalCentralityRisk}/30`;
     cabalRiskFill.style.width = `${(breakdown.cabalCentralityRisk / 30) * 100}%`;
-    cabalRiskFill.className = breakdown.cabalCentralityRisk > 15 ? 'meter-bar bar-danger' : 'meter-bar bar-safe';
+    cabalRiskFill.style.backgroundColor = breakdown.cabalCentralityRisk > 15 ? '#ff2244' : '#00ffa7';
     cabalRiskNote.innerText = `Cabal Index: ${dataPayload.cabalAnalysis.cabalCentralityIndex}% (${dataPayload.cabalAnalysis.clusteredWallets} clustered wallets)`;
 
     perpRiskVal.innerText = `${breakdown.perpWhaleDivergenceRisk}/20`;
     perpRiskFill.style.width = `${(breakdown.perpWhaleDivergenceRisk / 20) * 100}%`;
-    perpRiskFill.className = breakdown.perpWhaleDivergenceRisk > 10 ? 'meter-bar bar-warn' : 'meter-bar bar-safe';
+    perpRiskFill.style.backgroundColor = breakdown.perpWhaleDivergenceRisk > 10 ? '#ff7b2b' : '#00ffa7';
     perpRiskNote.innerText = dataPayload.perpsAndDerivatives.hasPerps
       ? `Perp Whales: ${dataPayload.perpsAndDerivatives.perpSentiment}`
       : 'No active Hyperliquid perp pool';
 
     liqRiskVal.innerText = `${breakdown.liquidityDrainRisk}/15`;
     liqRiskFill.style.width = `${(breakdown.liquidityDrainRisk / 15) * 100}%`;
-    liqRiskFill.className = breakdown.liquidityDrainRisk > 5 ? 'meter-bar bar-danger' : 'meter-bar bar-safe';
+    liqRiskFill.style.backgroundColor = breakdown.liquidityDrainRisk > 5 ? '#ff2244' : '#00ffa7';
     liqRiskNote.innerText = dataPayload.automatedExecution.jupiterDcaSellingDetected
       ? `${dataPayload.automatedExecution.activeSellOrdersCount} automated sell ladders firing`
       : 'Normal liquidity cadence';
 
-    // Cabal Visualization
+    // Draw Cabal Cluster
     drawCabalCluster(dataPayload.cabalAnalysis);
     clusterSummaryText.innerHTML = `Funding Tree: <code>${dataPayload.cabalAnalysis.rootFunderAddress}</code> — ${dataPayload.cabalAnalysis.fundingPattern}`;
 
@@ -217,13 +234,29 @@ document.addEventListener('DOMContentLoaded', () => {
     evidenceList.innerHTML = '';
     counterArguments.forEach(arg => {
       const item = document.createElement('div');
-      item.className = `evidence-item ${arg.severity === 'CRITICAL' ? '' : (arg.severity === 'HIGH' ? 'warn' : 'safe')}`;
+      item.className = `evidence-row ${arg.severity === 'CRITICAL' ? '' : (arg.severity === 'HIGH' ? 'warn' : 'safe')}`;
       item.innerHTML = `
-        <span class="evidence-tag">[${arg.vector}]</span>
-        <span class="evidence-text">${arg.text}</span>
+        <span class="ev-tag">[${arg.vector}]</span>
+        <span class="ev-text">${arg.text}</span>
       `;
       evidenceList.appendChild(item);
     });
+  }
+
+  // Number count-up animation
+  function animateValue(obj, start, end, duration) {
+    let startTimestamp = null;
+    const step = (timestamp) => {
+      if (!startTimestamp) startTimestamp = timestamp;
+      const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+      obj.innerText = Math.floor(progress * (end - start) + start);
+      if (progress < 1) {
+        window.requestAnimationFrame(step);
+      } else {
+        obj.innerText = end;
+      }
+    };
+    window.requestAnimationFrame(step);
   }
 
   // 5. Canvas Cabal Cluster Visualizer
@@ -242,39 +275,43 @@ document.addEventListener('DOMContentLoaded', () => {
     ctx.beginPath();
     ctx.arc(centerX, centerY, 13, 0, Math.PI * 2);
     ctx.fillStyle = isHighRisk ? '#ff2244' : '#00ffa7';
-    ctx.shadowBlur = 15;
+    ctx.shadowBlur = 18;
     ctx.shadowColor = isHighRisk ? '#ff2244' : '#00ffa7';
     ctx.fill();
     ctx.shadowBlur = 0;
 
-    // Draw Root Label
+    // Root Label
     ctx.fillStyle = '#ffffff';
-    ctx.font = '10.5px "JetBrains Mono", monospace';
+    ctx.font = '10px "JetBrains Mono", monospace';
     ctx.textAlign = 'center';
-    ctx.fillText(isHighRisk ? 'ROOT DISPERSE' : 'ORGANIC SOURCE', centerX, centerY - 18);
+    ctx.fillText(isHighRisk ? 'DISPERSE ROOT' : 'ORGANIC SOURCE', centerX, centerY - 17);
 
-    // Draw Satellites (Buyer Wallets)
+    // Satellites
     const walletCount = cabal.analyzedTopHolders || 14;
-    const radius = 68;
+    const radius = 64;
 
     for (let i = 0; i < walletCount; i++) {
       const angle = (i / walletCount) * Math.PI * 2;
-      const x = centerX + Math.cos(angle) * (radius + (i % 2 === 0 ? 16 : -12));
-      const y = centerY + Math.sin(angle) * (radius + (i % 2 === 0 ? 16 : -12));
+      const x = centerX + Math.cos(angle) * (radius + (i % 2 === 0 ? 15 : -10));
+      const y = centerY + Math.sin(angle) * (radius + (i % 2 === 0 ? 15 : -10));
 
       const isPuppet = isHighRisk && (i < cabal.clusteredWallets);
 
-      // Connecting Line
+      // Curved Line
       ctx.beginPath();
       ctx.moveTo(centerX, centerY);
-      ctx.lineTo(x, y);
-      ctx.strokeStyle = isPuppet ? 'rgba(255, 34, 68, 0.5)' : 'rgba(0, 255, 167, 0.25)';
+      ctx.quadraticCurveTo(
+        (centerX + x) / 2 + (i % 2 === 0 ? 10 : -10),
+        (centerY + y) / 2 + (i % 2 === 0 ? -10 : 10),
+        x, y
+      );
+      ctx.strokeStyle = isPuppet ? 'rgba(255, 34, 68, 0.45)' : 'rgba(0, 255, 167, 0.25)';
       ctx.lineWidth = isPuppet ? 1.6 : 0.9;
       ctx.stroke();
 
       // Satellite Dot
       ctx.beginPath();
-      ctx.arc(x, y, isPuppet ? 6.5 : 4.5, 0, Math.PI * 2);
+      ctx.arc(x, y, isPuppet ? 6 : 4, 0, Math.PI * 2);
       ctx.fillStyle = isPuppet ? '#ff2244' : '#00ffa7';
       ctx.shadowBlur = isPuppet ? 8 : 4;
       ctx.shadowColor = isPuppet ? '#ff2244' : '#00ffa7';
@@ -287,30 +324,25 @@ document.addEventListener('DOMContentLoaded', () => {
   exportBtn.addEventListener('click', () => {
     if (!currentReport) return;
     const dossierText = `
-=== NANSEN THESIS SHREDDER // ADVERSARIAL REPORT ===
-Timestamp: ${currentReport.timestamp}
+=== NANSEN THESIS SHREDDER REPORT ===
 Asset: ${currentReport.targetToken.symbol} (${currentReport.targetToken.chain})
-User Thesis: "${currentReport.userThesis}"
+Thesis: "${currentReport.userThesis}"
 
 SHRED SCORE: ${currentReport.shredScore}/100 [${currentReport.status}]
 Directive: ${currentReport.verdict.summary}
-Recommendation: ${currentReport.verdict.actionableRecommendation}
 
-Nansen Gauntlet Breakdown:
+Nansen Intelligence Vectors:
 - Smart Money Divergence: ${currentReport.breakdown.smartMoneyDivergenceRisk}/35
-- Cabal Centrality: ${currentReport.breakdown.cabalCentralityRisk}/30 (Index: ${currentReport.dataPayload.cabalAnalysis.cabalCentralityIndex}%)
-- Perp Whales Hedging: ${currentReport.breakdown.perpWhaleDivergenceRisk}/20
-- Liquidity Drain: ${currentReport.breakdown.liquidityDrainRisk}/15
-
-Verified Nansen Receipts:
-${currentReport.counterArguments.map(c => `* [${c.vector}] ${c.text}`).join('\n')}
+- Cabal Centrality Index: ${currentReport.dataPayload.cabalAnalysis.cabalCentralityIndex}%
+- Perp Whale Hedging: ${currentReport.breakdown.perpWhaleDivergenceRisk}/20
+- Liquidity Drain Risk: ${currentReport.breakdown.liquidityDrainRisk}/15
 
 Surface the Signal. Built for Nansen Meridian Buildathon 2026.
     `.trim();
 
     navigator.clipboard.writeText(dossierText).then(() => {
-      exportBtn.innerHTML = '<span>✅ COPIED TO CLIPBOARD</span>';
-      setTimeout(() => { exportBtn.innerHTML = '<span>📋 COPY DUE DILIGENCE DOSSIER</span>'; }, 2000);
+      exportBtn.innerText = '✅ Copied to Clipboard';
+      setTimeout(() => { exportBtn.innerText = 'Copy Due Diligence Dossier'; }, 2000);
     });
   });
 
@@ -319,9 +351,8 @@ Surface the Signal. Built for Nansen Meridian Buildathon 2026.
     if (!currentReport) return;
     const text = encodeURIComponent(
       `Don't ask AI to confirm your thesis. Make it try to break it. ⚔️\n\n` +
-      `Ran my $${currentReport.targetToken.symbol} thesis through @nansen_ai Thesis Shredder for #MeridianBuildathon.\n` +
-      `🔥 Shred Score: ${currentReport.shredScore}/100 (${currentReport.status})\n` +
-      `Nansen Evidence: ${currentReport.counterArguments[0]?.text || 'Verified with Nansen API'}\n\n` +
+      `Tested my $${currentReport.targetToken.symbol} trade idea through @nansen_ai Thesis Shredder for #MeridianBuildathon.\n` +
+      `🔥 Result: Fragility Score ${currentReport.shredScore}/100 (${currentReport.status})\n\n` +
       `Surface the Signal.`
     );
     window.open(`https://twitter.com/intent/tweet?text=${text}`, '_blank');
@@ -333,7 +364,7 @@ Surface the Signal. Built for Nansen Meridian Buildathon 2026.
 
   // 9. Harvester Simulation
   runHarvestSampleBtn.addEventListener('click', async () => {
-    runHarvestSampleBtn.innerText = 'LOGGING 50 NANSEN API CALLS...';
+    runHarvestSampleBtn.innerText = 'Logging 50 Nansen API calls...';
     try {
       const res = await fetch('/api/harvest-sample', {
         method: 'POST',
@@ -341,11 +372,11 @@ Surface the Signal. Built for Nansen Meridian Buildathon 2026.
         body: JSON.stringify({ count: 50 })
       });
       const data = await res.json();
-      harvesterLog.innerHTML = data.logs.slice(0, 8).join('<br/>') + `<br/>... Successfully logged ${data.callsExecuted} calls to Nansen API.`;
-      runHarvestSampleBtn.innerText = 'BATCH COMPLETE (50 CALLS LOGGED)';
+      harvesterLog.innerHTML = data.logs.slice(0, 8).join('<br/>') + `<br/>... Successfully logged ${data.callsExecuted} calls.`;
+      runHarvestSampleBtn.innerText = 'Batch Complete (50 Calls Logged)';
     } catch (e) {
       harvesterLog.innerText = 'Harvest failed: ' + e.message;
-      runHarvestSampleBtn.innerText = 'SIMULATE BATCH HARVEST (50 CALLS)';
+      runHarvestSampleBtn.innerText = 'Execute 50 Sample Calls';
     }
   });
 
